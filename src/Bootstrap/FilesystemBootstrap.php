@@ -13,6 +13,7 @@ namespace KiwiSuite\Filesystem\Bootstrap;
 
 use KiwiSuite\Application\Bootstrap\BootstrapInterface;
 use KiwiSuite\Application\ConfiguratorItem\ConfiguratorRegistry;
+use KiwiSuite\Application\ConfiguratorItem\ServiceManagerConfiguratorItem;
 use KiwiSuite\Application\Service\ServiceRegistry;
 use KiwiSuite\Filesystem\Adapter\Factory\FilesystemAdapterSubManagerFactory;
 use KiwiSuite\Filesystem\Adapter\FilesystemAdapterSubManager;
@@ -21,14 +22,18 @@ use KiwiSuite\Filesystem\Storage\Factory\StorageSubManagerFactory;
 use KiwiSuite\Filesystem\Storage\StorageConfig;
 use KiwiSuite\Filesystem\Storage\StorageSubManager;
 use KiwiSuite\ServiceManager\ServiceManager;
+use KiwiSuite\ServiceManager\ServiceManagerConfigurator;
 
 final class FilesystemBootstrap implements BootstrapInterface
 {
     public function configure(ConfiguratorRegistry $configuratorRegistry): void
     {
-        $configuratorRegistry->getConfigurator('serviceManagerConfigurator')->addFactory(StorageConfig::class, StorageConfigFactory::class);
-        $configuratorRegistry->getConfigurator('serviceManagerConfigurator')->addSubManager(StorageSubManager::class, StorageSubManagerFactory::class);
-        $configuratorRegistry->getConfigurator('serviceManagerConfigurator')->addSubManager(FilesystemAdapterSubManager::class, FilesystemAdapterSubManagerFactory::class);
+        /** @var ServiceManagerConfigurator $serviceManagerConfigurator */
+        $serviceManagerConfigurator = $configuratorRegistry->get(ServiceManagerConfiguratorItem::class);
+
+        $serviceManagerConfigurator->addFactory(StorageConfig::class, StorageConfigFactory::class);
+        $serviceManagerConfigurator->addSubManager(StorageSubManager::class, StorageSubManagerFactory::class);
+        $serviceManagerConfigurator->addSubManager(FilesystemAdapterSubManager::class, FilesystemAdapterSubManagerFactory::class);
     }
 
     public function addServices(ServiceRegistry $serviceRegistry): void

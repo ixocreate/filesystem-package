@@ -12,9 +12,9 @@ declare(strict_types=1);
 namespace KiwiSuite\Filesystem\Storage\Factory;
 
 use KiwiSuite\Config\Config;
+use KiwiSuite\Contract\ServiceManager\FactoryInterface;
+use KiwiSuite\Contract\ServiceManager\ServiceManagerInterface;
 use KiwiSuite\Filesystem\Storage\StorageConfig;
-use KiwiSuite\ServiceManager\FactoryInterface;
-use KiwiSuite\ServiceManager\ServiceManagerInterface;
 
 final class StorageConfigFactory implements FactoryInterface
 {
@@ -29,12 +29,6 @@ final class StorageConfigFactory implements FactoryInterface
      */
     public function __invoke(ServiceManagerInterface $container, $requestedName, array $options = null)
     {
-        $storageConfig = [];
-        if ($container->has(Config::class)) {
-            /** @var Config $config */
-            $config = $container->get(Config::class);
-            $storageConfig = $config->get("storage", []);
-        }
-        return new StorageConfig($storageConfig);
+        return new StorageConfig($container->get(Config::class)->get("storage", []));
     }
 }

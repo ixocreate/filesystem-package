@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace KiwiSuite\Filesystem\Adapter\Factory;
 
-use KiwiSuite\ServiceManager\FactoryInterface;
-use KiwiSuite\ServiceManager\ServiceManagerInterface;
+use KiwiSuite\Contract\ServiceManager\FactoryInterface;
+use KiwiSuite\Contract\ServiceManager\ServiceManagerInterface;
 use League\Flysystem\Adapter\Local;
 
 final class LocalFactory implements FactoryInterface

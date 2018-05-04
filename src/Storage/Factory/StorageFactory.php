@@ -11,10 +11,14 @@
 declare(strict_types=1);
 namespace KiwiSuite\Filesystem\Storage\Factory;
 
-use KiwiSuite\ServiceManager\FactoryInterface;
-use KiwiSuite\ServiceManager\ServiceManagerInterface;
 
-final class FilesystemFactory implements FactoryInterface
+use KiwiSuite\Contract\ServiceManager\FactoryInterface;
+use KiwiSuite\Contract\ServiceManager\ServiceManagerInterface;
+use KiwiSuite\Filesystem\Adapter\FilesystemAdapterSubManager;
+use KiwiSuite\Filesystem\Storage\StorageConfig;
+use League\Flysystem\Filesystem;
+
+final class StorageFactory implements FactoryInterface
 {
 
     /**
@@ -27,5 +31,13 @@ final class FilesystemFactory implements FactoryInterface
      */
     public function __invoke(ServiceManagerInterface $container, $requestedName, array $options = null)
     {
+        /** @var StorageConfig $storageConfig */
+        $storageConfig = $container->get(StorageConfig::class);
+
+        $params = $storageConfig->getStorageParams($requestedName);
+
+        $adapter = $container->get(FilesystemAdapterSubManager::class)->build($params['type'], $params['options']);
+
+        return new Filesystem($adapter);
     }
 }

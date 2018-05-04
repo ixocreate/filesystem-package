@@ -11,11 +11,12 @@
 declare(strict_types=1);
 namespace KiwiSuite\Filesystem\Adapter\Factory;
 
+use KiwiSuite\Contract\ServiceManager\ServiceManagerInterface;
+use KiwiSuite\Contract\ServiceManager\SubManager\SubManagerFactoryInterface;
+use KiwiSuite\Contract\ServiceManager\SubManager\SubManagerInterface;
 use KiwiSuite\Filesystem\Adapter\FilesystemAdapterSubManager;
 use KiwiSuite\ServiceManager\ServiceManagerConfig;
-use KiwiSuite\ServiceManager\ServiceManagerInterface;
-use KiwiSuite\ServiceManager\SubManager\SubManagerFactoryInterface;
-use KiwiSuite\ServiceManager\SubManager\SubManagerInterface;
+use KiwiSuite\ServiceManager\ServiceManagerConfigurator;
 use League\Flysystem\AdapterInterface;
 
 final class FilesystemAdapterSubManagerFactory implements SubManagerFactoryInterface
@@ -29,22 +30,15 @@ final class FilesystemAdapterSubManagerFactory implements SubManagerFactoryInter
      */
     public function __invoke(ServiceManagerInterface $container, $requestedName, array $options = null): SubManagerInterface
     {
-        $serviceManagerConfig = new ServiceManagerConfig(
-            [
-                'local' => LocalFactory::class,
-                'ftp' => FtpFactory::class,
-                'ftpd' => FtpdFactory::class,
-                'null' => NullFactory::class,
-            ],
-            [],
-            [],
-            [],
-            [],
-            []
-        );
+        $serviceManagerConfigigurator = new ServiceManagerConfigurator();
+        $serviceManagerConfigigurator->addFactory('local', LocalFactory::class);
+        $serviceManagerConfigigurator->addFactory('ftp', FtpFactory::class);
+        $serviceManagerConfigigurator->addFactory('ftpd', FtpdFactory::class);
+        $serviceManagerConfigigurator->addFactory('null', NullFactory::class);
+
         return new FilesystemAdapterSubManager(
             $container,
-            $serviceManagerConfig,
+            new ServiceManagerConfig($serviceManagerConfigigurator),
             AdapterInterface::class
         );
     }

@@ -11,7 +11,6 @@
 declare(strict_types=1);
 namespace KiwiSuite\Filesystem\Storage\Factory;
 
-
 use KiwiSuite\Contract\ServiceManager\FactoryInterface;
 use KiwiSuite\Contract\ServiceManager\ServiceManagerInterface;
 use KiwiSuite\Filesystem\Adapter\FilesystemAdapterSubManager;

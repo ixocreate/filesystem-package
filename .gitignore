@@ -1,11 +1,13 @@
-nbproject
-._*
-.~lock.*
-.buildpath
-.DS_Store
+vendor/
+.php_cs.cache
+.phpunit.result.cache
+composer.phar
+composer.lock
+phpunit.xml
+
+# IDEs
 .idea
+.DS_Store
 .project
 .settings
-.php_cs.cache
-/vendor
-/composer.lock
+nbproject

@@ -1,14 +1,12 @@
 <?php
 /**
- * kiwi-suite/filesystem (https://github.com/kiwi-suite/filesystem)
- *
- * @package kiwi-suite/filesystem
- * @see https://github.com/kiwi-suite/filesystem
- * @copyright Copyright (c) 2010 - 2018 kiwi suite GmbH
+ * @link https://github.com/ixocreate
+ * @copyright IXOCREATE GmbH
  * @license MIT License
  */
 
 declare(strict_types=1);
+
 namespace Ixocreate\Filesystem\Storage\Factory;
 
 use Ixocreate\Contract\ServiceManager\ServiceManagerInterface;
@@ -23,7 +21,6 @@ use League\Flysystem\FilesystemInterface;
 
 final class StorageSubManagerFactory implements SubManagerFactoryInterface
 {
-
     /**
      * @param ServiceManagerInterface $container
      * @param $requestedName

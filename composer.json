@@ -22,13 +22,13 @@
     },
     "autoload": {
         "psr-4": {
-            "KiwiSuite\\Filesystem\\": "src/"
+            "Ixocreate\\Filesystem\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "KiwiSuiteMisc\\Filesystem\\": "tests/misc/",
-            "KiwiSuiteTest\\Filesystem\\": "tests/src/"
+            "IxocreateMisc\\Filesystem\\": "tests/misc/",
+            "IxocreateTest\\Filesystem\\": "tests/src/"
         }
     }
 }

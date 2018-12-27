@@ -10,10 +10,10 @@
 
 declare(strict_types=1);
 
-namespace KiwiSuite\Filesystem\Adapter\Factory;
+namespace Ixocreate\Filesystem\Adapter\Factory;
 
-use KiwiSuite\Contract\ServiceManager\FactoryInterface;
-use KiwiSuite\Contract\ServiceManager\ServiceManagerInterface;
+use Ixocreate\Contract\ServiceManager\FactoryInterface;
+use Ixocreate\Contract\ServiceManager\ServiceManagerInterface;
 use League\Flysystem\Adapter\NullAdapter;
 
 final class NullFactory implements FactoryInterface

@@ -9,9 +9,9 @@
  */
 
 declare(strict_types=1);
-namespace KiwiSuite\Filesystem\Adapter;
+namespace Ixocreate\Filesystem\Adapter;
 
-use KiwiSuite\ServiceManager\SubManager\SubManager;
+use Ixocreate\ServiceManager\SubManager\SubManager;
 
 final class FilesystemAdapterSubManager extends SubManager
 {

@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace KiwiSuite\Filesystem;
+namespace Ixocreate\Filesystem;
 
-use KiwiSuite\Filesystem\Adapter\Factory\FilesystemAdapterSubManagerFactory;
-use KiwiSuite\Filesystem\Adapter\FilesystemAdapterSubManager;
-use KiwiSuite\Filesystem\Storage\Factory\StorageConfigFactory;
-use KiwiSuite\Filesystem\Storage\Factory\StorageSubManagerFactory;
-use KiwiSuite\Filesystem\Storage\StorageConfig;
-use KiwiSuite\Filesystem\Storage\StorageSubManager;
-use KiwiSuite\ServiceManager\ServiceManagerConfigurator;
+use Ixocreate\Filesystem\Adapter\Factory\FilesystemAdapterSubManagerFactory;
+use Ixocreate\Filesystem\Adapter\FilesystemAdapterSubManager;
+use Ixocreate\Filesystem\Storage\Factory\StorageConfigFactory;
+use Ixocreate\Filesystem\Storage\Factory\StorageSubManagerFactory;
+use Ixocreate\Filesystem\Storage\StorageConfig;
+use Ixocreate\Filesystem\Storage\StorageSubManager;
+use Ixocreate\ServiceManager\ServiceManagerConfigurator;
 
 /** @var ServiceManagerConfigurator $serviceManager */
 $serviceManager->addFactory(StorageConfig::class, StorageConfigFactory::class);

@@ -9,12 +9,12 @@
  */
 
 declare(strict_types=1);
-namespace KiwiSuite\Filesystem\Storage\Factory;
+namespace Ixocreate\Filesystem\Storage\Factory;
 
-use KiwiSuite\Config\Config;
-use KiwiSuite\Contract\ServiceManager\FactoryInterface;
-use KiwiSuite\Contract\ServiceManager\ServiceManagerInterface;
-use KiwiSuite\Filesystem\Storage\StorageConfig;
+use Ixocreate\Config\Config;
+use Ixocreate\Contract\ServiceManager\FactoryInterface;
+use Ixocreate\Contract\ServiceManager\ServiceManagerInterface;
+use Ixocreate\Filesystem\Storage\StorageConfig;
 
 final class StorageConfigFactory implements FactoryInterface
 {

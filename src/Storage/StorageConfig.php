@@ -9,7 +9,7 @@
  */
 
 declare(strict_types=1);
-namespace KiwiSuite\Filesystem\Storage;
+namespace Ixocreate\Filesystem\Storage;
 
 final class StorageConfig
 {

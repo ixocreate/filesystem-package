@@ -14,9 +14,9 @@
          timeoutForLargeTests="60"
          strict="true"
          verbose="false"
-        >
+>
     <testsuites>
-        <testsuite name="kiwi test suite">
+        <testsuite name="filesystem test suite">
             <directory>./tests/src</directory>
         </testsuite>
     </testsuites>

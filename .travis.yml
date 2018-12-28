@@ -2,18 +2,21 @@ language: php
 sudo: false
 php:
 - '7.1'
+- '7.2'
 cache:
   directories:
   - "$HOME/.composer/cache"
 before_script:
 - composer install --prefer-dist --no-interaction
-- composer require --dev satooshi/php-coveralls
+- composer require --dev php-coveralls/php-coveralls
 script:
 - mkdir -p build/logs
 - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
-- vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run --using-cache=no --path-mode=intersection
+- vendor/bin/php-cs-fixer fix --config=vendor/ixocreate/coding-standard/.php_cs -v --dry-run --using-cache=no --path-mode=intersection
   `git diff --name-only --diff-filter=ACMRTUXB $TRAVIS_COMMIT_RANGE`
 after_success:
-  - travis_retry php vendor/bin/php-coveralls -v
+- travis_retry php vendor/bin/php-coveralls -v
 notifications:
   email: false
+  slack:
+    secure: D8n3a+huB9ZEBE3pILS4ObLAtjW+OTCJUUgVL8aQ9q19N1XI9nd+dS5AEyluWPyTnvFdBHaT7aTNog5RMvSE8jrrW5+9L0lx++qLelSd5qrtnQB0zLtUR0HEaxn6LEQ8cUbch8o3vOy0w5EsFI6v+EQugByrHdCj64P14Tj9YpE57kSMjYBfh6jVbMg7a9XRkk8stx0VluQgQSJuKYQ/B2T8gkxKc+Q49e7frG2eqylxzKhRH3TTFl8L2DRgqPGQCKgpSYgNg6mdy9YpUdys622rC93AQwRJpFnmeQM44VyabHxWc9LW7zy3AZAZbH4IzYWyQM8R2nkqZ0UXPjxNto1s5j+jhPTFLmF0TvsoyrxT4P9bkeGqPC18jE+V4J11jaAfgWUKC3Ey7Mh5+kPYGyu7qgReXJMzyq2+JbwDy66dyNaZLsevPxoOjDlPIviRuNgHqM8pfITqEeUNxjj+GpGEwSpcu2lutePBWeLwLQ7A+F8fw8OOByrY7l4iF/tzdwLaDW4DJCpNqtaHqzTqsZb6NnzEO1ZDCqAJYX2FjI6LX4fJlqHk5hrYoIV4REPNFMn/gwxhW8LknwTyH7O9NJBmEkmAHEOOdYwHea1vY5IFBCBbDW0yFYzbkCGRkE5zkiJi7IrLcpDhehhrIpqZ3RpLtoH+hmL48Gz9X+1SCu4=

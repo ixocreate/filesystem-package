@@ -1,6 +1,6 @@
 # IXOCREATE filesystem
 
-[![Build Status](https://travis-ci.org/ixocreate/filesystem.svg?branch=master)](https://travis-ci.org/ixocreate/filesystem)
+[![Build Status](https://travis-ci.com/ixocreate/filesystem.svg?branch=master)](https://travis-ci.com/ixocreate/filesystem)
 [![Coverage Status](https://coveralls.io/repos/github/ixocreate/filesystem/badge.svg?branch=develop)](https://coveralls.io/github/ixocreate/filesystem?branch=develop)
 [![Packagist](https://img.shields.io/packagist/v/ixocreate/filesystem.svg)](https://packagist.org/packages/ixocreate/filesystem)
 [![Packagist Pre Release](https://img.shields.io/packagist/vpre/ixocreate/filesystem.svg)](https://packagist.org/packages/ixocreate/filesystem)

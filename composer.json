@@ -12,11 +12,11 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.1",
-        "league/flysystem": "^1.0"
+        "league/flysystem": "^1.0",
+        "ixocreate/contract": "=1.0.0-alpha1"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0.6",
-        "ixocreate/contract": "dev-develop",
         "php-coveralls/php-coveralls": "^2.0",
         "ixocreate/coding-standard": "^1.0"
     },

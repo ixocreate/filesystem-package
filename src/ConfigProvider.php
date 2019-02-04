@@ -22,4 +22,14 @@ final class ConfigProvider implements ConfigProviderInterface
             'storage' => [],
         ];
     }
+
+    public function configName(): string
+    {
+        return 'filesystem';
+    }
+
+    public function configContent(): string
+    {
+        return \file_get_contents(__DIR__ . '/../resources/filesystem.config.example.php');
+    }
 }

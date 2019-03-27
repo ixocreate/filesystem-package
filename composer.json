@@ -18,7 +18,7 @@
     "require-dev": {
         "ixocreate/coding-standard": "^1.0.1",
         "php-coveralls/php-coveralls": "^2.1",
-        "phpunit/phpunit": "^6.0.6"
+        "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "psr-4": {

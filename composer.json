@@ -1,5 +1,5 @@
 {
-    "name": "ixocreate/filesystem",
+    "name": "ixocreate/filesystem-package",
     "description": "IXOCREATE filesystem integration",
     "license": "MIT",
     "type": "library",

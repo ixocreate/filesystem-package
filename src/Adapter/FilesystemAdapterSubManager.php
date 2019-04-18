@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Ixocreate\Package\Filesystem\Adapter;
+namespace Ixocreate\Filesystem\Package\Adapter;
 
 use Ixocreate\ServiceManager\SubManager\SubManager;
 

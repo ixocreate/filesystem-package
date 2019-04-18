@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Ixocreate\Package\Filesystem;
+namespace Ixocreate\Filesystem\Package;
 
 use Ixocreate\Application\ConfigProviderInterface;
 

@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-namespace Ixocreate\Package\Filesystem\Adapter\Factory;
+namespace Ixocreate\Filesystem\Package\Adapter\Factory;
 
 use Ixocreate\ServiceManager\ServiceManagerInterface;
 use Ixocreate\ServiceManager\SubManager\SubManagerFactoryInterface;
 use Ixocreate\ServiceManager\SubManager\SubManagerInterface;
-use Ixocreate\Package\Filesystem\Adapter\FilesystemAdapterSubManager;
+use Ixocreate\Filesystem\Package\Adapter\FilesystemAdapterSubManager;
 use Ixocreate\ServiceManager\ServiceManagerConfig;
 use Ixocreate\ServiceManager\ServiceManagerConfigurator;
 use League\Flysystem\AdapterInterface;

@@ -7,13 +7,13 @@
 
 declare(strict_types=1);
 
-namespace Ixocreate\Package\Filesystem\Storage\Factory;
+namespace Ixocreate\Filesystem\Package\Storage\Factory;
 
 use Ixocreate\ServiceManager\ServiceManagerInterface;
 use Ixocreate\ServiceManager\SubManager\SubManagerFactoryInterface;
 use Ixocreate\ServiceManager\SubManager\SubManagerInterface;
-use Ixocreate\Package\Filesystem\Storage\StorageConfig;
-use Ixocreate\Package\Filesystem\Storage\StorageSubManager;
+use Ixocreate\Filesystem\Package\Storage\StorageConfig;
+use Ixocreate\Filesystem\Package\Storage\StorageSubManager;
 use Ixocreate\ServiceManager\ServiceManagerConfig;
 use Ixocreate\ServiceManager\ServiceManagerConfigurator;
 use League\Flysystem\Filesystem;

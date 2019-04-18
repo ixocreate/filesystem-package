@@ -18,6 +18,7 @@ final class StorageConfig
 
     /**
      * StorageConfig constructor.
+     *
      * @param array $config
      */
     public function __construct(array $config)
@@ -30,7 +31,7 @@ final class StorageConfig
      * @param string $name
      * @return array
      */
-    public function getStorageParams(string $name) : array
+    public function getStorageParams(string $name): array
     {
         if (!\array_key_exists($name, $this->config)) {
             //TODO Exception
@@ -41,7 +42,7 @@ final class StorageConfig
     /**
      * @return array
      */
-    public function getStorageNames() : array
+    public function getStorageNames(): array
     {
         return \array_keys($this->config);
     }

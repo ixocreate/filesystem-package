@@ -9,13 +9,13 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem\Storage\Factory;
 
+use Ixocreate\Application\Service\ServiceManagerConfig;
+use Ixocreate\Application\Service\ServiceManagerConfigurator;
+use Ixocreate\Filesystem\Storage\StorageConfig;
+use Ixocreate\Filesystem\Storage\StorageSubManager;
 use Ixocreate\ServiceManager\ServiceManagerInterface;
 use Ixocreate\ServiceManager\SubManager\SubManagerFactoryInterface;
 use Ixocreate\ServiceManager\SubManager\SubManagerInterface;
-use Ixocreate\Filesystem\Storage\StorageConfig;
-use Ixocreate\Filesystem\Storage\StorageSubManager;
-use Ixocreate\ServiceManager\ServiceManagerConfig;
-use Ixocreate\ServiceManager\ServiceManagerConfigurator;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 
@@ -25,12 +25,15 @@ final class StorageSubManagerFactory implements SubManagerFactoryInterface
      * @param ServiceManagerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
      * @return SubManagerInterface
      */
-    public function __invoke(ServiceManagerInterface $container, $requestedName, array $options = null): SubManagerInterface
-    {
+    public function __invoke(
+        ServiceManagerInterface $container,
+        $requestedName,
+        array $options = null
+    ): SubManagerInterface {
         $serviceManagerConfigurator = new ServiceManagerConfigurator();
 
         /** @var StorageConfig $storageConfig */

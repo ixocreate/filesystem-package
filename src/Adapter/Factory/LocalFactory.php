@@ -31,7 +31,7 @@ final class LocalFactory implements FactoryInterface
         return new Local($config['root'], $config['writeFlags'], $config['linkHandling'], $config['permissions']);
     }
 
-    private function getConfig(array $options) : array
+    private function getConfig(array $options): array
     {
         $config = [
             'writeFlags' => LOCK_EX,

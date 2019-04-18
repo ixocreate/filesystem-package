@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Ixocreate\Filesystem;
+namespace Ixocreate\Package\Filesystem;
 
-use Ixocreate\Filesystem\Adapter\Factory\FilesystemAdapterSubManagerFactory;
-use Ixocreate\Filesystem\Adapter\FilesystemAdapterSubManager;
-use Ixocreate\Filesystem\Storage\Factory\StorageConfigFactory;
-use Ixocreate\Filesystem\Storage\Factory\StorageSubManagerFactory;
-use Ixocreate\Filesystem\Storage\StorageConfig;
-use Ixocreate\Filesystem\Storage\StorageSubManager;
+use Ixocreate\Package\Filesystem\Adapter\Factory\FilesystemAdapterSubManagerFactory;
+use Ixocreate\Package\Filesystem\Adapter\FilesystemAdapterSubManager;
+use Ixocreate\Package\Filesystem\Storage\Factory\StorageConfigFactory;
+use Ixocreate\Package\Filesystem\Storage\Factory\StorageSubManagerFactory;
+use Ixocreate\Package\Filesystem\Storage\StorageConfig;
+use Ixocreate\Package\Filesystem\Storage\StorageSubManager;
 use Ixocreate\ServiceManager\ServiceManagerConfigurator;
 
 /** @var ServiceManagerConfigurator $serviceManager */

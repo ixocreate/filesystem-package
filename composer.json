@@ -1,6 +1,6 @@
 {
-    "name": "ixocreate/filesystem",
-    "description": "IXOCREATE filesystem integration",
+    "name": "ixocreate/filesystem-package",
+    "description": "IXOCREATE Filesystem Package",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -12,23 +12,23 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.1",
-        "league/flysystem": "^1.0",
-        "ixocreate/contract": "dev-develop"
+        "ixocreate/application": "dev-consolidate",
+        "league/flysystem": "^1.0"
     },
     "require-dev": {
-        "ixocreate/coding-standard": "^1.0.1",
+        "ixocreate/coding-standard": "^1.0",
         "php-coveralls/php-coveralls": "^2.1",
         "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "psr-4": {
-            "Ixocreate\\Filesystem\\": "src/"
+            "Ixocreate\\Package\\Filesystem\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "IxocreateMisc\\Filesystem\\": "tests/misc/",
-            "IxocreateTest\\Filesystem\\": "tests/src/"
+            "Ixocreate\\Misc\\Filesystem\\": "tests/misc/",
+            "Ixocreate\\Test\\Filesystem\\": "tests/src/"
         }
     },
     "scripts": {

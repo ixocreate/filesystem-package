@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Ixocreate\Filesystem\Storage;
+namespace Ixocreate\Package\Filesystem\Storage;
 
 use Ixocreate\ServiceManager\SubManager\SubManager;
 

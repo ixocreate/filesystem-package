@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-namespace Ixocreate\Filesystem\Storage\Factory;
+namespace Ixocreate\Package\Filesystem\Storage\Factory;
 
 use Ixocreate\Config\Config;
-use Ixocreate\Contract\ServiceManager\FactoryInterface;
-use Ixocreate\Contract\ServiceManager\ServiceManagerInterface;
-use Ixocreate\Filesystem\Storage\StorageConfig;
+use Ixocreate\ServiceManager\FactoryInterface;
+use Ixocreate\ServiceManager\ServiceManagerInterface;
+use Ixocreate\Package\Filesystem\Storage\StorageConfig;
 
 final class StorageConfigFactory implements FactoryInterface
 {

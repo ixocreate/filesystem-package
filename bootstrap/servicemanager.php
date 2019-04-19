@@ -1,4 +1,10 @@
 <?php
+/**
+ * @link https://github.com/ixocreate
+ * @copyright IXOCREATE GmbH
+ * @license MIT License
+ */
+
 declare(strict_types=1);
 
 namespace Ixocreate\Filesystem;
@@ -12,7 +18,6 @@ use Ixocreate\Filesystem\Storage\StorageConfig;
 use Ixocreate\Filesystem\Storage\StorageSubManager;
 
 /** @var ServiceManagerConfigurator $serviceManager */
-
 $serviceManager->addFactory(StorageConfig::class, StorageConfigFactory::class);
 $serviceManager->addSubManager(FilesystemAdapterSubManager::class, FilesystemAdapterSubManagerFactory::class);
 $serviceManager->addSubManager(StorageSubManager::class, StorageSubManagerFactory::class);

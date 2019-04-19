@@ -12,7 +12,7 @@
     "prefer-stable": true,
     "require": {
         "php": "^7.1",
-        "ixocreate/application": "dev-consolidate",
+        "ixocreate/application": "dev-develop",
         "league/flysystem": "^1.0"
     },
     "require-dev": {

@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem\Adapter\Factory;
 
-use Ixocreate\Contract\ServiceManager\FactoryInterface;
-use Ixocreate\Contract\ServiceManager\ServiceManagerInterface;
+use Ixocreate\ServiceManager\FactoryInterface;
+use Ixocreate\ServiceManager\ServiceManagerInterface;
 use League\Flysystem\Adapter\Local;
 
 final class LocalFactory implements FactoryInterface
@@ -31,7 +31,7 @@ final class LocalFactory implements FactoryInterface
         return new Local($config['root'], $config['writeFlags'], $config['linkHandling'], $config['permissions']);
     }
 
-    private function getConfig(array $options) : array
+    private function getConfig(array $options): array
     {
         $config = [
             'writeFlags' => LOCK_EX,

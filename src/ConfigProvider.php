@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem;
 
-use Ixocreate\Contract\Application\ConfigProviderInterface;
+use Ixocreate\Application\Config\ConfigProviderInterface;
 
 final class ConfigProvider implements ConfigProviderInterface
 {
@@ -21,5 +21,15 @@ final class ConfigProvider implements ConfigProviderInterface
         return [
             'storage' => [],
         ];
+    }
+
+    public function configName(): string
+    {
+        return 'filesystem';
+    }
+
+    public function configContent(): string
+    {
+        return \file_get_contents(__DIR__ . '/../resources/filesystem.config.example.php');
     }
 }

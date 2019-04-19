@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem\Adapter\Factory;
 
-use Ixocreate\Contract\ServiceManager\FactoryInterface;
-use Ixocreate\Contract\ServiceManager\ServiceManagerInterface;
+use Ixocreate\ServiceManager\FactoryInterface;
+use Ixocreate\ServiceManager\ServiceManagerInterface;
 use League\Flysystem\Adapter\NullAdapter;
 
 final class NullFactory implements FactoryInterface

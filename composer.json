@@ -8,15 +8,13 @@
             "name": "IXOCREATE"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "^7.1",
         "ixocreate/application": "^0.1",
         "league/flysystem": "^1.0"
     },
     "require-dev": {
-        "ixocreate/coding-standard": "^1.0",
+        "ixocreate/coding-standard": "^2.0",
         "php-coveralls/php-coveralls": "^2.1",
         "phpunit/phpunit": "^7.0"
     },
@@ -30,6 +28,9 @@
             "Ixocreate\\Misc\\Filesystem\\": "tests/misc/",
             "Ixocreate\\Test\\Filesystem\\": "tests/src/"
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "scripts": {
         "fix-cs": "vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --config vendor/ixocreate/coding-standard/.php_cs"

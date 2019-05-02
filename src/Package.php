@@ -35,7 +35,9 @@ final class Package implements PackageInterface
      */
     public function getBootstrapItems(): ?array
     {
-        return null;
+        return [
+            FilesystemBootstrapItem::class,
+        ];
     }
 
     /**
@@ -43,9 +45,7 @@ final class Package implements PackageInterface
      */
     public function getConfigProvider(): ?array
     {
-        return [
-            ConfigProvider::class,
-        ];
+        return null;
     }
 
     /**

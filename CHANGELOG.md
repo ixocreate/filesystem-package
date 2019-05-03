@@ -1,6 +1,8 @@
 # Release Notes
 
-## [Unreleased](https://github.com/ixocreate/filesystem-package/compare/0.1.0...develop)
+## [Unreleased](https://github.com/ixocreate/filesystem-package/compare/0.3.0...develop)
+
+## [v0.3.0 (2019-05-03)](https://github.com/ixocreate/filesystem-package/compare/master...0.3.0)
 ### Added
 - Sync support between two filesystems
 

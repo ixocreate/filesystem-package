@@ -271,4 +271,96 @@ final class Filesystem implements FilesystemInterface
     {
         return $this->innerFilesystem->readAndDelete($path);
     }
+
+    public function syncFrom(FilesystemInterface $filesystem, ?SettingsInterface $settings = null): array
+    {
+        if ($settings === null) {
+            $settings = new Settings();
+        }
+
+        $sourceRoot = \trim($settings->get('sourceRoot', ''), '/');
+        $destinationRoot = \trim($settings->get('destinationRoot', ''), '/');
+
+        $syncResult = (new Sync())
+            ->diff(
+                $filesystem,
+                $this,
+                $sourceRoot,
+                $destinationRoot
+            );
+
+        $result = [
+            'update' => [],
+            'create' => [],
+            'delete' => [],
+        ];
+
+        if ($settings->get("doUpdate", true)) {
+            foreach ($syncResult['update'] as $item) {
+                if ($item['type'] === "dir") {
+                    continue;
+                }
+
+                if ($item['type'] === "file") {
+                    $destinationPath = $item['path'];
+                    if (!empty($destinationRoot)) {
+                        $destinationPath = $destinationRoot . '/' . $destinationPath;
+                    }
+
+                    $sourcePath = $item['path'];
+                    if (!empty($sourceRoot)) {
+                        $sourcePath = $sourceRoot . '/' . $sourcePath;
+                    }
+                    $this->putStream($destinationPath, $filesystem->readStream($sourcePath));
+                    $result['update'][] = $destinationPath;
+                    continue;
+                }
+            }
+        }
+
+        if ($settings->get("doCreate", true)) {
+            foreach ($syncResult['create'] as $item) {
+                $destinationPath = $item['path'];
+                if (!empty($destinationRoot)) {
+                    $destinationPath = $destinationRoot . '/' . $destinationPath;
+                }
+
+                $sourcePath = $item['path'];
+                if (!empty($sourceRoot)) {
+                    $sourcePath = $sourceRoot . '/' . $sourcePath;
+                }
+
+                if ($item['type'] === "dir") {
+                    $this->createDir($destinationPath, $settings);
+                    $result['create'][] = $destinationPath;
+                    continue;
+                }
+
+                if ($item['type'] === "file") {
+                    $this->writeStream($destinationPath, $filesystem->readStream($sourcePath));
+                    $result['create'][] = $destinationPath;
+                    continue;
+                }
+            }
+        }
+
+        if ($settings->get("doDelete", true)) {
+            foreach ($syncResult['delete'] as $item) {
+                $destinationPath = $item['path'];
+
+                if ($item['type'] === "dir") {
+                    $this->deleteDir($destinationPath);
+                    $result['delete'][] = $destinationPath;
+                    continue;
+                }
+                if ($item['type'] === "file") {
+                    $this->delete($destinationPath);
+                    $result['delete'][] = $destinationPath;
+                    continue;
+                }
+            }
+        }
+
+        return $result;
+    }
 }

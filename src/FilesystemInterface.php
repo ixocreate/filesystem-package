@@ -159,4 +159,11 @@ interface FilesystemInterface
      * @return string|false
      */
     public function readAndDelete(string $path);
+
+    /**
+     * @param FilesystemInterface $filesystem
+     * @param SettingsInterface|null $settings
+     * @return array
+     */
+    public function syncFrom(FilesystemInterface $filesystem, ?SettingsInterface $settings = null): array;
 }

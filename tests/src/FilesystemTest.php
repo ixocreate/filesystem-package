@@ -11,6 +11,7 @@ namespace Ixocreate\Test\Filesystem;
 
 use Ixocreate\Filesystem\Adapter;
 use Ixocreate\Filesystem\Filesystem;
+use Ixocreate\Filesystem\FilesystemInterface;
 use Ixocreate\Filesystem\Settings;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
@@ -210,7 +211,20 @@ class FilesystemTest extends TestCase
              */
             public function listContents($directory = '', $recursive = false)
             {
-                return [];
+                return [
+                    [
+                        'type' => 'dir',
+                        'path' => 'dir1',
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'dir1/file1',
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'dir1/file2',
+                    ],
+                ];
             }
 
             /**
@@ -294,7 +308,29 @@ class FilesystemTest extends TestCase
 
     public function testListContents()
     {
-        $this->assertSame([], $this->filesystem->listContents("test"));
+        $this->assertSame([
+            [
+                'type' => 'dir',
+                'path' => 'dir1',
+                'dirname' => '',
+                'basename' => 'dir1',
+                'filename' => 'dir1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir1/file1',
+                'dirname' => 'dir1',
+                'basename' => 'file1',
+                'filename' => 'file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir1/file2',
+                'dirname' => 'dir1',
+                'basename' => 'file2',
+                'filename' => 'file2',
+            ],
+        ], $this->filesystem->listContents("", true));
     }
 
     public function testGetMetadata()
@@ -391,5 +427,279 @@ class FilesystemTest extends TestCase
     {
         $this->assertTrue($this->filesystem->write("check", 'content', new Settings(['check' => false])));
         $this->assertFalse($this->filesystem->write("check", 'content', new Settings(['check' => true])));
+    }
+
+    public function testSyncWithRoot()
+    {
+        $destinationFiles = [
+            [
+                'type' => 'dir',
+                'path' => 'd/dir1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'd/dir1/file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'd/dir1/file2',
+            ],
+            [
+                'type' => 'dir',
+                'path' => 'd/dir2',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'd/dir2/file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'd/dir2/file2',
+            ],
+        ];
+
+        $sourceFiles = [
+            [
+                'type' => 'dir',
+                'path' => 'dir1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir1/file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir1/file2',
+            ],
+            [
+                'type' => 'dir',
+                'path' => 'dir3',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir3/file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir3/file2',
+            ],
+        ];
+
+        $sourceFilesystem = $this->createMock(FilesystemInterface::class);
+        $sourceFilesystem->method("listContents")->willReturn($sourceFiles);
+        $sourceFilesystem->method("readStream")->willReturn(\fopen("php://temp", "r"));
+
+        $flysystemAdapter = $this->createMock(AdapterInterface::class);
+        $flysystemAdapter->method("listContents")->willReturn($destinationFiles);
+        $flysystemAdapter->method("deleteDir")->willReturn(true);
+        $flysystemAdapter->method("delete")->willReturn(true);
+        $flysystemAdapter->method("writeStream")->willReturn(true);
+        $flysystemAdapter->method("createDir")->willReturn(true);
+        $filesystem = new Filesystem(new Adapter($flysystemAdapter), new Settings(['disable_asserts' => true]));
+
+        $result = $filesystem->syncFrom(
+            $sourceFilesystem,
+            new Settings([
+                'sourceRoot' => 's',
+                'destinationRoot' => 'd',
+            ])
+        );
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('update', $result);
+        $this->assertArrayHasKey('create', $result);
+        $this->assertArrayHasKey('delete', $result);
+
+        $this->assertSame([
+            'd/dir1/file1',
+            'd/dir1/file2',
+        ], $result['update']);
+        $this->assertSame([
+            'd/dir3',
+            'd/dir3/file1',
+            'd/dir3/file2',
+        ], $result['create']);
+        $this->assertSame([
+            'd/dir2/file2',
+            'd/dir2/file1',
+            'd/dir2',
+        ], $result['delete']);
+    }
+
+    public function testSyncWithoutRoot()
+    {
+        $destinationFiles = [
+            [
+                'type' => 'dir',
+                'path' => 'dir1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir1/file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir1/file2',
+            ],
+            [
+                'type' => 'dir',
+                'path' => 'dir2',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir2/file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir2/file2',
+            ],
+        ];
+
+        $sourceFiles = [
+            [
+                'type' => 'dir',
+                'path' => 'dir1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir1/file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir1/file2',
+            ],
+            [
+                'type' => 'dir',
+                'path' => 'dir3',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir3/file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'dir3/file2',
+            ],
+        ];
+
+        $sourceFilesystem = $this->createMock(FilesystemInterface::class);
+        $sourceFilesystem->method("listContents")->willReturn($sourceFiles);
+        $sourceFilesystem->method("readStream")->willReturn(\fopen("php://temp", "r"));
+
+        $flysystemAdapter = $this->createMock(AdapterInterface::class);
+        $flysystemAdapter->method("listContents")->willReturn($destinationFiles);
+        $flysystemAdapter->method("deleteDir")->willReturn(true);
+        $flysystemAdapter->method("delete")->willReturn(true);
+        $flysystemAdapter->method("writeStream")->willReturn(true);
+        $flysystemAdapter->method("createDir")->willReturn(true);
+        $filesystem = new Filesystem(new Adapter($flysystemAdapter), new Settings(['disable_asserts' => true]));
+
+        $result = $filesystem->syncFrom($sourceFilesystem);
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('update', $result);
+        $this->assertArrayHasKey('create', $result);
+        $this->assertArrayHasKey('delete', $result);
+
+        $this->assertSame([
+            'dir1/file1',
+            'dir1/file2',
+        ], $result['update']);
+        $this->assertSame([
+            'dir3',
+            'dir3/file1',
+            'dir3/file2',
+        ], $result['create']);
+        $this->assertSame([
+            'dir2/file2',
+            'dir2/file1',
+            'dir2',
+        ], $result['delete']);
+    }
+
+    public function testSyncWithDoFlags()
+    {
+        $destinationFiles = [
+            [
+                'type' => 'file',
+                'path' => 'file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'file2',
+            ],
+        ];
+
+        $sourceFiles = [
+            [
+                'type' => 'file',
+                'path' => 'file1',
+            ],
+            [
+                'type' => 'file',
+                'path' => 'file3',
+            ],
+        ];
+
+        $sourceFilesystem = $this->createMock(FilesystemInterface::class);
+        $sourceFilesystem->method("listContents")->willReturn($sourceFiles);
+        $sourceFilesystem->method("readStream")->willReturn(\fopen("php://temp", "r"));
+
+        $flysystemAdapter = $this->createMock(AdapterInterface::class);
+        $flysystemAdapter->method("listContents")->willReturn($destinationFiles);
+        $flysystemAdapter->method("deleteDir")->willReturn(true);
+        $flysystemAdapter->method("delete")->willReturn(true);
+        $flysystemAdapter->method("writeStream")->willReturn(true);
+        $flysystemAdapter->method("createDir")->willReturn(true);
+        $filesystem = new Filesystem(new Adapter($flysystemAdapter), new Settings(['disable_asserts' => true]));
+
+        $result = $filesystem->syncFrom(
+            $sourceFilesystem,
+            new Settings(['doUpdate' => false])
+        );
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('update', $result);
+        $this->assertArrayHasKey('create', $result);
+        $this->assertArrayHasKey('delete', $result);
+
+        $this->assertEmpty($result['update']);
+        $this->assertSame([
+            'file3',
+        ], $result['create']);
+        $this->assertSame([
+            'file2',
+        ], $result['delete']);
+
+        $result = $filesystem->syncFrom(
+            $sourceFilesystem,
+            new Settings(['doDelete' => false])
+        );
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('update', $result);
+        $this->assertArrayHasKey('create', $result);
+        $this->assertArrayHasKey('delete', $result);
+
+        $this->assertSame([
+            'file1',
+        ], $result['update']);
+        $this->assertSame([
+            'file3',
+        ], $result['create']);
+        $this->assertEmpty($result['delete']);
+
+        $result = $filesystem->syncFrom(
+            $sourceFilesystem,
+            new Settings(['doCreate' => false])
+        );
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('update', $result);
+        $this->assertArrayHasKey('create', $result);
+        $this->assertArrayHasKey('delete', $result);
+
+        $this->assertSame([
+            'file1',
+        ], $result['update']);
+        $this->assertEmpty($result['create']);
+        $this->assertSame([
+            'file2',
+        ], $result['delete']);
     }
 }

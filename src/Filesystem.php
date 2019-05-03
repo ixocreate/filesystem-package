@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem;
 
-use League\Flysystem\FileNotFoundException;
-
 final class Filesystem implements FilesystemInterface
 {
     /**
@@ -280,8 +278,8 @@ final class Filesystem implements FilesystemInterface
             $settings = new Settings();
         }
 
-        $sourceRoot = trim($settings->get('sourceRoot', ''), '/');
-        $destinationRoot = trim($settings->get('destinationRoot', ''), '/');
+        $sourceRoot = \trim($settings->get('sourceRoot', ''), '/');
+        $destinationRoot = \trim($settings->get('destinationRoot', ''), '/');
 
         $syncResult = (new Sync())
             ->diff(

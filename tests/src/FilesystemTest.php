@@ -214,16 +214,16 @@ class FilesystemTest extends TestCase
                 return [
                     [
                         'type' => 'dir',
-                        'path' => 'dir1'
+                        'path' => 'dir1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir1/file1'
+                        'path' => 'dir1/file1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir1/file2'
-                    ]
+                        'path' => 'dir1/file2',
+                    ],
                 ];
             }
 
@@ -314,22 +314,22 @@ class FilesystemTest extends TestCase
                 'path' => 'dir1',
                 'dirname' => '',
                 'basename' => 'dir1',
-                'filename' => 'dir1'
+                'filename' => 'dir1',
             ],
             [
                 'type' => 'file',
                 'path' => 'dir1/file1',
                 'dirname' => 'dir1',
                 'basename' => 'file1',
-                'filename' => 'file1'
+                'filename' => 'file1',
             ],
             [
                 'type' => 'file',
                 'path' => 'dir1/file2',
                 'dirname' => 'dir1',
                 'basename' => 'file2',
-                'filename' => 'file2'
-            ]
+                'filename' => 'file2',
+            ],
         ], $this->filesystem->listContents("", true));
     }
 
@@ -434,54 +434,54 @@ class FilesystemTest extends TestCase
         $destinationFiles = [
             [
                 'type' => 'dir',
-                'path' => 'd/dir1'
+                'path' => 'd/dir1',
             ],
             [
                 'type' => 'file',
-                'path' => 'd/dir1/file1'
+                'path' => 'd/dir1/file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'd/dir1/file2'
+                'path' => 'd/dir1/file2',
             ],
             [
                 'type' => 'dir',
-                'path' => 'd/dir2'
+                'path' => 'd/dir2',
             ],
             [
                 'type' => 'file',
-                'path' => 'd/dir2/file1'
+                'path' => 'd/dir2/file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'd/dir2/file2'
+                'path' => 'd/dir2/file2',
             ],
         ];
 
         $sourceFiles = [
             [
                 'type' => 'dir',
-                'path' => 'dir1'
+                'path' => 'dir1',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir1/file1'
+                'path' => 'dir1/file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir1/file2'
+                'path' => 'dir1/file2',
             ],
             [
                 'type' => 'dir',
-                'path' => 'dir3'
+                'path' => 'dir3',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir3/file1'
+                'path' => 'dir3/file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir3/file2'
+                'path' => 'dir3/file2',
             ],
         ];
 
@@ -501,7 +501,7 @@ class FilesystemTest extends TestCase
             $sourceFilesystem,
             new Settings([
                 'sourceRoot' => 's',
-                'destinationRoot' => 'd'
+                'destinationRoot' => 'd',
             ])
         );
         $this->assertIsArray($result);
@@ -516,12 +516,12 @@ class FilesystemTest extends TestCase
         $this->assertSame([
             'd/dir3',
             'd/dir3/file1',
-            'd/dir3/file2'
+            'd/dir3/file2',
         ], $result['create']);
         $this->assertSame([
             'd/dir2/file2',
             'd/dir2/file1',
-            'd/dir2'
+            'd/dir2',
         ], $result['delete']);
     }
 
@@ -530,54 +530,54 @@ class FilesystemTest extends TestCase
         $destinationFiles = [
             [
                 'type' => 'dir',
-                'path' => 'dir1'
+                'path' => 'dir1',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir1/file1'
+                'path' => 'dir1/file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir1/file2'
+                'path' => 'dir1/file2',
             ],
             [
                 'type' => 'dir',
-                'path' => 'dir2'
+                'path' => 'dir2',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir2/file1'
+                'path' => 'dir2/file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir2/file2'
+                'path' => 'dir2/file2',
             ],
         ];
 
         $sourceFiles = [
             [
                 'type' => 'dir',
-                'path' => 'dir1'
+                'path' => 'dir1',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir1/file1'
+                'path' => 'dir1/file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir1/file2'
+                'path' => 'dir1/file2',
             ],
             [
                 'type' => 'dir',
-                'path' => 'dir3'
+                'path' => 'dir3',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir3/file1'
+                'path' => 'dir3/file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'dir3/file2'
+                'path' => 'dir3/file2',
             ],
         ];
 
@@ -606,12 +606,12 @@ class FilesystemTest extends TestCase
         $this->assertSame([
             'dir3',
             'dir3/file1',
-            'dir3/file2'
+            'dir3/file2',
         ], $result['create']);
         $this->assertSame([
             'dir2/file2',
             'dir2/file1',
-            'dir2'
+            'dir2',
         ], $result['delete']);
     }
 
@@ -620,22 +620,22 @@ class FilesystemTest extends TestCase
         $destinationFiles = [
             [
                 'type' => 'file',
-                'path' => 'file1'
+                'path' => 'file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'file2'
+                'path' => 'file2',
             ],
         ];
 
         $sourceFiles = [
             [
                 'type' => 'file',
-                'path' => 'file1'
+                'path' => 'file1',
             ],
             [
                 'type' => 'file',
-                'path' => 'file3'
+                'path' => 'file3',
             ],
         ];
 

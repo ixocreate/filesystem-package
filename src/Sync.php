@@ -1,5 +1,12 @@
 <?php
+/**
+ * @link https://github.com/ixocreate
+ * @copyright IXOCREATE GmbH
+ * @license MIT License
+ */
+
 declare(strict_types=1);
+
 namespace Ixocreate\Filesystem;
 
 final class Sync
@@ -17,8 +24,8 @@ final class Sync
         string $sourceRoot,
         string $destinationRoot
     ): array {
-        $sourceRoot = trim($sourceRoot, '/') ;
-        $destinationRoot = trim($destinationRoot, '/');
+        $sourceRoot = \trim($sourceRoot, '/') ;
+        $destinationRoot = \trim($destinationRoot, '/');
 
         $sourcePaths = $this->getSyncPaths($source, $sourceRoot);
         $destinationPaths = $this->getSyncPaths($destination, $destinationRoot);
@@ -61,12 +68,12 @@ final class Sync
         $paths = [];
         foreach ($filesystem->listContents($startDirectory, $recursive = true) as $path) {
             $key = $path['path'];
-            if (!empty($startDirectory) && \substr($key, 0, \strlen($startDirectory) + 1) === $startDirectory . '/') {
-                $key = \substr($key, \strlen($startDirectory) + 1);
+            if (!empty($startDirectory) && \mb_substr($key, 0, \mb_strlen($startDirectory) + 1) === $startDirectory . '/') {
+                $key = \mb_substr($key, \mb_strlen($startDirectory) + 1);
             }
             $paths[$key] = $path;
         }
-        ksort($paths);
+        \ksort($paths);
 
         return $paths;
     }

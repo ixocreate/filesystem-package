@@ -20,6 +20,10 @@ class SyncTest extends TestCase
 {
     /**
      * @dataProvider fileProvider
+     * @param mixed $sourceFiles
+     * @param mixed $destinationFiles
+     * @param mixed $sourceRoot
+     * @param mixed $destRoot
      */
     public function testSync($sourceFiles, $destinationFiles, $sourceRoot, $destRoot)
     {
@@ -46,14 +50,14 @@ class SyncTest extends TestCase
 
         foreach ($sourceFiles as $sourceItem) {
             $sourcePath = $sourceItem['path'];
-            if (!empty($sourceRoot) && \substr($sourcePath, 0, \strlen($sourceRoot) + 1) === $sourceRoot . '/') {
-                $sourcePath = \substr($sourcePath, \strlen($sourceRoot) + 1);
+            if (!empty($sourceRoot) && \mb_substr($sourcePath, 0, \mb_strlen($sourceRoot) + 1) === $sourceRoot . '/') {
+                $sourcePath = \mb_substr($sourcePath, \mb_strlen($sourceRoot) + 1);
             }
 
             foreach ($destinationFiles as $destinationItem) {
                 $destinationItemPath = $destinationItem['path'];
-                if (!empty($destRoot) && \substr($destinationItemPath, 0, \strlen($destRoot) + 1) === $destRoot . '/') {
-                    $destinationItemPath = \substr($destinationItemPath, \strlen($destRoot) + 1);
+                if (!empty($destRoot) && \mb_substr($destinationItemPath, 0, \mb_strlen($destRoot) + 1) === $destRoot . '/') {
+                    $destinationItemPath = \mb_substr($destinationItemPath, \mb_strlen($destRoot) + 1);
                 }
 
 
@@ -68,14 +72,14 @@ class SyncTest extends TestCase
 
         foreach ($destinationFiles as $destinationItem) {
             $destinationItemPath = $destinationItem['path'];
-            if (!empty($destRoot) && \substr($destinationItemPath, 0, \strlen($destRoot) + 1) === $destRoot . '/') {
-                $destinationItemPath = \substr($destinationItemPath, \strlen($destRoot) + 1);
+            if (!empty($destRoot) && \mb_substr($destinationItemPath, 0, \mb_strlen($destRoot) + 1) === $destRoot . '/') {
+                $destinationItemPath = \mb_substr($destinationItemPath, \mb_strlen($destRoot) + 1);
             }
 
             foreach ($sourceFiles as $sourceItem) {
                 $sourcePath = $sourceItem['path'];
-                if (!empty($sourceRoot) && \substr($sourcePath, 0, \strlen($sourceRoot) + 1) === $sourceRoot . '/') {
-                    $sourcePath = \substr($sourcePath, \strlen($sourceRoot) + 1);
+                if (!empty($sourceRoot) && \mb_substr($sourcePath, 0, \mb_strlen($sourceRoot) + 1) === $sourceRoot . '/') {
+                    $sourcePath = \mb_substr($sourcePath, \mb_strlen($sourceRoot) + 1);
                 }
 
                 if ($destinationItem['type'] === $sourceItem['type'] && $destinationItemPath === $sourcePath) {
@@ -98,125 +102,125 @@ class SyncTest extends TestCase
                 [
                     [
                         'type' => 'dir',
-                        'path' => 'dir1'
+                        'path' => 'dir1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir1/file1'
+                        'path' => 'dir1/file1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir1/file3'
+                        'path' => 'dir1/file3',
                     ],
                     [
                         'type' => 'dir',
-                        'path' => 'dir2'
+                        'path' => 'dir2',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir2/file1'
+                        'path' => 'dir2/file1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir2/file2'
+                        'path' => 'dir2/file2',
                     ],
                     [
                         'type' => 'dir',
-                        'path' => 'dir3'
+                        'path' => 'dir3',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir3/file1'
+                        'path' => 'dir3/file1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir3/file2'
+                        'path' => 'dir3/file2',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir3/file3'
+                        'path' => 'dir3/file3',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir3/file4'
+                        'path' => 'dir3/file4',
                     ],
                 ],
                 [
                     [
                         'type' => 'dir',
-                        'path' => 'dir1'
+                        'path' => 'dir1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir1/file1'
+                        'path' => 'dir1/file1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir1/file2'
+                        'path' => 'dir1/file2',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir1/file3'
+                        'path' => 'dir1/file3',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir1/file4'
+                        'path' => 'dir1/file4',
                     ],
                     [
                         'type' => 'dir',
-                        'path' => 'dir2'
+                        'path' => 'dir2',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir2/file1'
+                        'path' => 'dir2/file1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir2/file2'
+                        'path' => 'dir2/file2',
                     ],
                     [
                         'type' => 'dir',
-                        'path' => 'dir3'
+                        'path' => 'dir3',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir3/file1'
+                        'path' => 'dir3/file1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir3/file2'
+                        'path' => 'dir3/file2',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'dir3/file3'
+                        'path' => 'dir3/file3',
                     ],
                 ],
                 'sourceRoot',
-                'destRoot'
+                'destRoot',
             ],
             [
                 [
                     [
                         'type' => 'dir',
-                        'path' => 'sourceRoot/dir1'
+                        'path' => 'sourceRoot/dir1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'sourceRoot/dir1/file1'
+                        'path' => 'sourceRoot/dir1/file1',
                     ],
                 ],
                 [
                     [
                         'type' => 'dir',
-                        'path' => 'destRoot/dir1'
+                        'path' => 'destRoot/dir1',
                     ],
                     [
                         'type' => 'file',
-                        'path' => 'destRoot/dir1/file1'
+                        'path' => 'destRoot/dir1/file1',
                     ],
                 ],
                 'sourceRoot',
-                'destRoot'
+                'destRoot',
             ],
         ];
     }

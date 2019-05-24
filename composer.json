@@ -4,8 +4,11 @@
     "license": "MIT",
     "type": "library",
     "authors": [
-        {
-            "name": "IXOCREATE"
+         {
+            "name": "IXOCREATE",
+            "email": "opensource@ixocreate.com",
+            "homepage": "https://www.ixocreate.com",
+            "role": "Developer"
         }
     ],
     "require": {

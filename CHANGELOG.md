@@ -2,6 +2,10 @@
 
 ## [Unreleased](https://github.com/ixocreate/filesystem-package/compare/0.3.1...develop)
 
+## [v0.3.2 (2019-09-11)](https://github.com/ixocreate/filesystem-package/compare/0.3.1...0.3.2)
+### Added
+- new S3Option
+
 ## [v0.3.1 (2019-05-03)](https://github.com/ixocreate/filesystem-package/compare/0.3.0...0.3.1)
 ### Added
 - Compatibility with Application v0.2

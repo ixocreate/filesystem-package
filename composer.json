@@ -18,7 +18,8 @@
     },
     "require-dev": {
         "ixocreate/coding-standard": "^2.0",
-        "ixocreate/test": "dev-develop"
+        "ixocreate/test": "dev-develop",
+        "league/flysystem-aws-s3-v3": "^1.0"
     },
     "autoload": {
         "psr-4": {

@@ -25,6 +25,7 @@ final class S3Option implements OptionInterface
         'version' => 'latest',
         'bucketName' => '',
         'initialPath' => '',
+        'metaData' => [],
     ];
 
     public function setKey(string $key): void
@@ -87,6 +88,21 @@ final class S3Option implements OptionInterface
         return $this->config['initialPath'];
     }
 
+    public function addMetaData($name, $value): void
+    {
+        $this->config['metaData'][$name] = $value;
+    }
+
+    public function setMetaData(array $metaData): void
+    {
+        $this->config['metaData'] = $metaData;
+    }
+
+    public function metaData(): array
+    {
+        return $this->config['metaData'];
+    }
+
     /**
      * @return string|void
      */
@@ -121,7 +137,8 @@ final class S3Option implements OptionInterface
                     'version' => $this->version(),
                 ]),
                 $this->bucketName(),
-                $this->initialPath()
+                $this->initialPath(),
+                $this->metaData()
             )
         );
     }

@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/ixocreate/filesystem-package/compare/0.3.1...develop)
+## [Unreleased](https://github.com/ixocreate/filesystem-package/compare/0.3.3...develop)
+
+## [v0.3.3 (2019-12-04)](https://github.com/ixocreate/filesystem-package/compare/0.3.2...0.3.3)
+### Added
+- added metadata support for S3Option
 
 ## [v0.3.2 (2019-09-11)](https://github.com/ixocreate/filesystem-package/compare/0.3.1...0.3.2)
 ### Added

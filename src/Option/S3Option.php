@@ -14,7 +14,7 @@ use Ixocreate\Filesystem\Adapter;
 use Ixocreate\Filesystem\AdapterInterface;
 use Ixocreate\Filesystem\OptionInterface;
 use Ixocreate\ServiceManager\ServiceManagerInterface;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 
 final class S3Option implements OptionInterface
 {
@@ -25,7 +25,7 @@ final class S3Option implements OptionInterface
         'version' => 'latest',
         'bucketName' => '',
         'initialPath' => '',
-        'metaData' => [],
+        'options' => [],
     ];
 
     public function setKey(string $key): void
@@ -88,19 +88,38 @@ final class S3Option implements OptionInterface
         return $this->config['initialPath'];
     }
 
+    /**
+     * @param $name
+     * @param $value
+     * @deprecated
+     */
     public function addMetaData($name, $value): void
     {
-        $this->config['metaData'][$name] = $value;
+        $this->addOption($name, $value);
     }
 
+    public function addOption($name, $value): void
+    {
+        $this->config['options'][$name] = $value;
+    }
+
+    /**
+     * @param array $metaData
+     * @deprecated
+     */
     public function setMetaData(array $metaData): void
     {
-        $this->config['metaData'] = $metaData;
+        $this->setOptions($metaData);
     }
 
-    public function metaData(): array
+    public function setOptions(array $options): void
     {
-        return $this->config['metaData'];
+        $this->config['options'] = $options;
+    }
+
+    public function options(): array
+    {
+        return $this->config['options'];
     }
 
     /**
@@ -127,7 +146,7 @@ final class S3Option implements OptionInterface
     public function create(string $name, ServiceManagerInterface $serviceManager): AdapterInterface
     {
         return new Adapter(
-            new AwsS3Adapter(
+            new AwsS3V3Adapter(
                 new S3Client([
                     'credentials' => [
                         'key'    => $this->key(),
@@ -138,7 +157,9 @@ final class S3Option implements OptionInterface
                 ]),
                 $this->bucketName(),
                 $this->initialPath(),
-                $this->metaData()
+                null,
+                null,
+                $this->options()
             )
         );
     }

@@ -13,7 +13,8 @@ use Ixocreate\Filesystem\Adapter;
 use Ixocreate\Filesystem\AdapterInterface;
 use Ixocreate\Filesystem\OptionInterface;
 use Ixocreate\ServiceManager\ServiceManagerInterface;
-use League\Flysystem\Adapter\Local;
+use League\Flysystem\Local\LocalFilesystemAdapter;
+use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 
 final class LocalOption implements OptionInterface
 {
@@ -189,21 +190,27 @@ final class LocalOption implements OptionInterface
     {
         switch ($this->config['linkHandling']) {
             case self::LINKS_SKIP:
-                $linkHandling = Local::SKIP_LINKS;
+                $linkHandling = LocalFilesystemAdapter::SKIP_LINKS;
                 break;
             case self::LINKS_DISALLOW:
             default:
-                $linkHandling = Local::DISALLOW_LINKS;
+                $linkHandling = LocalFilesystemAdapter::DISALLOW_LINKS;
                 break;
         }
 
+        $visibilityConverter = new PortableVisibilityConverter(
+            $this->config['permission']['file']['public'],
+            $this->config['permission']['file']['private'],
+            $this->config['permission']['dir']['public'],
+            $this->config['permission']['dir']['private']
+        );
 
         return new Adapter(
-            new Local(
+            new LocalFilesystemAdapter(
                 $this->config['directory'],
+                $visibilityConverter,
                 $this->config['flag'],
-                $linkHandling,
-                $this->config['permission']
+                $linkHandling
             )
         );
     }

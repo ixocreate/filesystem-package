@@ -29,7 +29,7 @@ class FilesystemConfigTest extends TestCase
      */
     private $filesystemConfig;
 
-    public function setUp()
+    public function setUp(): void
     {
         $option = $this->createMock(OptionInterface::class);
         $option->method('serialize')->willReturn(\serialize(""));

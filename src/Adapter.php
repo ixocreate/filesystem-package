@@ -9,26 +9,28 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem;
 
+use League\Flysystem\FilesystemAdapter;
+
 final class Adapter implements AdapterInterface
 {
     /**
-     * @var \League\Flysystem\AdapterInterface
+     * @var FilesystemAdapter
      */
     private $adapter;
 
     /**
      * ProxyAdapter constructor.
-     * @param \League\Flysystem\AdapterInterface $adapter
+     * @param FilesystemAdapter $adapter
      */
-    public function __construct(\League\Flysystem\AdapterInterface $adapter)
+    public function __construct(FilesystemAdapter $adapter)
     {
         $this->adapter = $adapter;
     }
 
     /**
-     * @return \League\Flysystem\AdapterInterface
+     * @return FilesystemAdapter
      */
-    public function adapter(): \League\Flysystem\AdapterInterface
+    public function adapter(): FilesystemAdapter
     {
         return $this->adapter;
     }

@@ -13,8 +13,12 @@ use Ixocreate\Filesystem\Adapter;
 use Ixocreate\Filesystem\Filesystem;
 use Ixocreate\Filesystem\FilesystemInterface;
 use Ixocreate\Filesystem\Settings;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\DirectoryListing;
+use League\Flysystem\FileAttributes;
+use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,264 +31,84 @@ class FilesystemTest extends TestCase
      */
     private $filesystem;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $adapter = new Adapter(new class() implements AdapterInterface {
-            /**
-             * Write a new file.
-             *
-             * @param string $path
-             * @param string $contents
-             * @param Config $config Config object
-             *
-             * @return array|false false on failure file meta data on success
-             */
-            public function write($path, $contents, Config $config)
-            {
-                if ($path === "check" && $config->get("check", false) === true) {
-                    return false;
-                }
-                return ['path' => $path];
-            }
-
-            /**
-             * Write a new file using a stream.
-             *
-             * @param string $path
-             * @param resource $resource
-             * @param Config $config Config object
-             *
-             * @return array|false false on failure file meta data on success
-             */
-            public function writeStream($path, $resource, Config $config)
-            {
-                return ['path' => $path];
-            }
-
-            /**
-             * Update a file.
-             *
-             * @param string $path
-             * @param string $contents
-             * @param Config $config Config object
-             *
-             * @return array|false false on failure file meta data on success
-             */
-            public function update($path, $contents, Config $config)
-            {
-                return ['path' => $path];
-            }
-
-            /**
-             * Update a file using a stream.
-             *
-             * @param string $path
-             * @param resource $resource
-             * @param Config $config Config object
-             *
-             * @return array|false false on failure file meta data on success
-             */
-            public function updateStream($path, $resource, Config $config)
-            {
-                return ['path' => $path];
-            }
-
-            /**
-             * Rename a file.
-             *
-             * @param string $path
-             * @param string $newpath
-             *
-             * @return bool
-             */
-            public function rename($path, $newpath)
+        $adapter = new Adapter(new class() implements FilesystemAdapter {
+            public function fileExists(string $path): bool
             {
                 return true;
             }
 
-            /**
-             * Copy a file.
-             *
-             * @param string $path
-             * @param string $newpath
-             *
-             * @return bool
-             */
-            public function copy($path, $newpath)
+            public function write(string $path, string $contents, Config $config): void
             {
-                return true;
             }
 
-            /**
-             * Delete a file.
-             *
-             * @param string $path
-             *
-             * @return bool
-             */
-            public function delete($path)
+            public function writeStream(string $path, $contents, Config $config): void
             {
-                return true;
             }
 
-            /**
-             * Delete a directory.
-             *
-             * @param string $dirname
-             *
-             * @return bool
-             */
-            public function deleteDir($dirname)
+            public function read(string $path): string
             {
-                return true;
+                return 'test';
             }
 
-            /**
-             * Create a directory.
-             *
-             * @param string $dirname directory name
-             * @param Config $config
-             *
-             * @return array|false
-             */
-            public function createDir($dirname, Config $config)
+            public function readStream(string $path)
             {
-                return ['path' => $dirname, 'type' => 'dir'];
+                return \fopen('php://temp', 'rb');
             }
 
-            /**
-             * Set the visibility for a file.
-             *
-             * @param string $path
-             * @param string $visibility
-             *
-             * @return array|false file meta data
-             */
-            public function setVisibility($path, $visibility)
+            public function delete(string $path): void
             {
-                return \compact('path', 'visibility');
             }
 
-            /**
-             * Check whether a file exists.
-             *
-             * @param string $path
-             *
-             * @return array|bool|null
-             */
-            public function has($path)
+            public function deleteDirectory(string $path): void
             {
-                return true;
             }
 
-            /**
-             * Read a file.
-             *
-             * @param string $path
-             *
-             * @return array|false
-             */
-            public function read($path)
+            public function createDirectory(string $path, Config $config): void
             {
-                return ['type' => 'file', 'path' => $path, 'contents' => "test"];
             }
 
-            /**
-             * Read a file as a stream.
-             *
-             * @param string $path
-             *
-             * @return array|false
-             */
-            public function readStream($path)
+            public function setVisibility(string $path, string $visibility): void
             {
-                return ['type' => 'file', 'path' => $path, 'stream' => \fopen('php://temp', 'rb')];
             }
 
-            /**
-             * List contents of a directory.
-             *
-             * @param string $directory
-             * @param bool $recursive
-             *
-             * @return array
-             */
-            public function listContents($directory = '', $recursive = false)
+            public function visibility(string $path): FileAttributes
             {
-                return [
-                    [
-                        'type' => 'dir',
-                        'path' => 'dir1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir1/file1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir1/file2',
-                    ],
-                ];
+                return new FileAttributes($path, null, Visibility::PRIVATE);
             }
 
-            /**
-             * Get all the meta data of a file or directory.
-             *
-             * @param string $path
-             *
-             * @return array|false
-             */
-            public function getMetadata($path)
+            public function mimeType(string $path): FileAttributes
             {
-                return ['test' => 'test'];
+                return new FileAttributes($path, null, null, null, 'image/png');
             }
 
-            /**
-             * Get the size of a file.
-             *
-             * @param string $path
-             *
-             * @return array|false
-             */
-            public function getSize($path)
+            public function lastModified(string $path): FileAttributes
             {
-                return ['size' => 42];
+                return new FileAttributes($path, null, null, 42);
             }
 
-            /**
-             * Get the mimetype of a file.
-             *
-             * @param string $path
-             *
-             * @return array|false
-             */
-            public function getMimetype($path)
+            public function fileSize(string $path): FileAttributes
             {
-                return ['mimetype' => 'image/png'];
+                return new FileAttributes($path, 42);
             }
 
-            /**
-             * Get the last modified time of a file as a timestamp.
-             *
-             * @param string $path
-             *
-             * @return array|false
-             */
-            public function getTimestamp($path)
+            public function listContents(string $path, bool $deep): iterable
             {
-                return ['timestamp' => '42'];
+                return new \ArrayIterator([
+                    new FileAttributes('file1', 123, Visibility::PUBLIC, 42),
+                    new DirectoryAttributes('dir1', Visibility::PUBLIC, 43),
+                    new FileAttributes('dir1/file1', 234, Visibility::PUBLIC, 44),
+                    new FileAttributes('dir2/file2', 345, Visibility::PRIVATE, 45),
+                ]);
             }
 
-            /**
-             * Get the visibility of a file.
-             *
-             * @param string $path
-             *
-             * @return array|false
-             */
-            public function getVisibility($path)
+            public function move(string $source, string $destination, Config $config): void
             {
-                return ['visibility' => 'private'];
+            }
+
+            public function copy(string $source, string $destination, Config $contestSyncWithDoFlagsfig): void
+            {
             }
         });
 
@@ -308,193 +132,173 @@ class FilesystemTest extends TestCase
 
     public function testListContents()
     {
-        $this->assertSame([
-            [
-                'type' => 'dir',
-                'path' => 'dir1',
-                'dirname' => '',
-                'basename' => 'dir1',
-                'filename' => 'dir1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir1/file1',
-                'dirname' => 'dir1',
-                'basename' => 'file1',
-                'filename' => 'file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir1/file2',
-                'dirname' => 'dir1',
-                'basename' => 'file2',
-                'filename' => 'file2',
-            ],
-        ], $this->filesystem->listContents("", true));
-    }
-
-    public function testGetMetadata()
-    {
-        $this->assertSame(['test' => 'test'], $this->filesystem->getMetadata("test"));
+        $this->assertEquals(new DirectoryListing(new \ArrayIterator([
+            new FileAttributes('file1', 123, Visibility::PUBLIC, 42),
+            new DirectoryAttributes('dir1', Visibility::PUBLIC, 43),
+            new FileAttributes('dir1/file1', 234, Visibility::PUBLIC, 44),
+            new FileAttributes('dir2/file2', 345, Visibility::PRIVATE, 45),
+        ])), $this->filesystem->listContents('', true));
     }
 
     public function testGetSize()
     {
-        $this->assertSame(42, $this->filesystem->getSize("test"));
+        $this->assertSame(42, $this->filesystem->getSize('test'));
     }
 
     public function testGetMimetype()
     {
-        $this->assertSame('image/png', $this->filesystem->getMimetype("test"));
+        $this->assertSame('image/png', $this->filesystem->getMimetype('test'));
     }
 
     public function testGetTimestamp()
     {
-        $this->assertSame('42', $this->filesystem->getTimestamp("test"));
+        $this->assertSame(42, $this->filesystem->getTimestamp('test'));
     }
 
     public function testGetVisibility()
     {
-        $this->assertSame('private', $this->filesystem->getVisibility("test"));
+        $this->assertSame('private', $this->filesystem->getVisibility('test'));
     }
 
     public function testWrite()
     {
-        $this->assertTrue($this->filesystem->write("test", 'content'));
+        $mockAdapter = $this->createMock(FilesystemAdapter::class);
+        $mockAdapter->expects($this->once())->method('write')->with(
+            $this->equalTo('test'),
+            $this->equalTo('content')
+        );
+
+        $filesystem = new Filesystem(new Adapter($mockAdapter));
+        $filesystem->write('test', 'content');
     }
 
     public function testWriteStream()
     {
-        $this->assertTrue($this->filesystem->writeStream("test", \fopen('php://temp', 'rb')));
-    }
+        $mockAdapter = $this->createMock(FilesystemAdapter::class);
+        $mockAdapter->expects($this->once())->method('writeStream')->with(
+            $this->equalTo('test'),
+            $this->callback(function($value) {
+                return \is_resource($value);
+            }),
+            $this->anything()
+        );
 
-    public function testUpdate()
-    {
-        $this->assertTrue($this->filesystem->update("test", 'content'));
-    }
-
-    public function testUpdateStream()
-    {
-        $this->assertTrue($this->filesystem->updateStream("test", \fopen('php://temp', 'rb')));
-    }
-
-    public function testPut()
-    {
-        $this->assertTrue($this->filesystem->put("test", 'content'));
-    }
-
-    public function testPutStream()
-    {
-        $this->assertTrue($this->filesystem->putStream("test", \fopen('php://temp', 'rb')));
+        $filesystem = new Filesystem(new Adapter($mockAdapter));
+        $filesystem->writeStream('test', \fopen('php://temp', 'rb'));
     }
 
     public function testRename()
     {
-        $this->assertTrue($this->filesystem->rename("old", "new"));
+        $mockAdapter = $this->createMock(FilesystemAdapter::class);
+        $mockAdapter->expects($this->once())->method('move')->with(
+            $this->equalTo('old'),
+            $this->equalTo('new')
+        );
+
+        $filesystem = new Filesystem(new Adapter($mockAdapter));
+        $filesystem->rename('old', 'new');
     }
 
     public function testCopy()
     {
-        $this->assertTrue($this->filesystem->copy("old", "new"));
+        $mockAdapter = $this->createMock(FilesystemAdapter::class);
+        $mockAdapter->expects($this->once())->method('copy')->with(
+            $this->equalTo('old'),
+            $this->equalTo('new')
+        );
+
+        $filesystem = new Filesystem(new Adapter($mockAdapter));
+        $filesystem->copy('old', 'new');
     }
 
     public function testDelete()
     {
-        $this->assertTrue($this->filesystem->delete("test"));
+        $mockAdapter = $this->createMock(FilesystemAdapter::class);
+        $mockAdapter->expects($this->once())->method('delete')->with(
+            $this->equalTo('test')
+        );
+
+        $filesystem = new Filesystem(new Adapter($mockAdapter));
+        $filesystem->delete('test');
     }
 
     public function testDeleteDir()
     {
-        $this->assertTrue($this->filesystem->deleteDir("test"));
+        $mockAdapter = $this->createMock(FilesystemAdapter::class);
+        $mockAdapter->expects($this->once())->method('deleteDirectory')->with(
+            $this->equalTo('test')
+        );
+
+        $filesystem = new Filesystem(new Adapter($mockAdapter));
+        $filesystem->deleteDir('test');
     }
 
     public function testCreateDir()
     {
-        $this->assertTrue($this->filesystem->createDir("test"));
+        $mockAdapter = $this->createMock(FilesystemAdapter::class);
+        $mockAdapter->expects($this->once())->method('createDirectory')->with(
+            $this->equalTo('test')
+        );
+
+        $filesystem = new Filesystem(new Adapter($mockAdapter));
+        $filesystem->createDir('test');
     }
 
     public function testSetVisibility()
     {
-        $this->assertTrue($this->filesystem->setVisibility("test", 'private'));
-    }
+        $mockAdapter = $this->createMock(FilesystemAdapter::class);
+        $mockAdapter->expects($this->once())->method('setVisibility')->with(
+            $this->equalTo('test'),
+            $this->equalTo('private')
+        );
 
-    public function testReadAndDelete()
-    {
-        $this->assertSame("test", $this->filesystem->readAndDelete("test"));
+        $filesystem = new Filesystem(new Adapter($mockAdapter));
+        $filesystem->setVisibility('test', 'private');
     }
 
     public function testConfig()
     {
-        $this->assertTrue($this->filesystem->write("check", 'content', new Settings(['check' => false])));
-        $this->assertFalse($this->filesystem->write("check", 'content', new Settings(['check' => true])));
+        $mockAdapter = $this->createMock(FilesystemAdapter::class);
+        $mockAdapter->expects($this->once())->method('write')->with(
+            $this->anything(),
+            $this->anything(),
+            $this->equalTo(new Config(['disable_asserts' => true, 'test1' => true, 'check' => false]))
+        );
+
+        $filesystem = new Filesystem(new Adapter($mockAdapter), new Settings(['disable_asserts' => true, 'test1' => false]));
+        $filesystem->write("check", 'content', new Settings(['check' => false, 'test1' => true]));
     }
 
     public function testSyncWithRoot()
     {
-        $destinationFiles = [
-            [
-                'type' => 'dir',
-                'path' => 'd/dir1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'd/dir1/file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'd/dir1/file2',
-            ],
-            [
-                'type' => 'dir',
-                'path' => 'd/dir2',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'd/dir2/file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'd/dir2/file2',
-            ],
-        ];
+        $destinationFiles = new DirectoryListing(new \ArrayIterator([
+            new DirectoryAttributes('d/dir1'),
+            new FileAttributes('d/dir1/file1'),
+            new FileAttributes('d/dir1/file2'),
+            new DirectoryAttributes('d/dir2'),
+            new FileAttributes('d/dir2/file1'),
+            new FileAttributes('d/dir2/file2'),
+        ]));
 
-        $sourceFiles = [
-            [
-                'type' => 'dir',
-                'path' => 'dir1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir1/file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir1/file2',
-            ],
-            [
-                'type' => 'dir',
-                'path' => 'dir3',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir3/file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir3/file2',
-            ],
-        ];
+        $sourceFiles = new DirectoryListing(new \ArrayIterator([
+            new DirectoryAttributes('dir1'),
+            new FileAttributes('dir1/file1'),
+            new FileAttributes('dir1/file2'),
+            new DirectoryAttributes('dir3'),
+            new FileAttributes('dir3/file1'),
+            new FileAttributes('dir3/file2'),
+        ]));
 
         $sourceFilesystem = $this->createMock(FilesystemInterface::class);
         $sourceFilesystem->method("listContents")->willReturn($sourceFiles);
         $sourceFilesystem->method("readStream")->willReturn(\fopen("php://temp", "r"));
 
-        $flysystemAdapter = $this->createMock(AdapterInterface::class);
+        $flysystemAdapter = $this->createMock(FilesystemAdapter::class);
         $flysystemAdapter->method("listContents")->willReturn($destinationFiles);
-        $flysystemAdapter->method("deleteDir")->willReturn(true);
-        $flysystemAdapter->method("delete")->willReturn(true);
-        $flysystemAdapter->method("writeStream")->willReturn(true);
-        $flysystemAdapter->method("createDir")->willReturn(true);
+        $flysystemAdapter->method("deleteDirectory");
+        $flysystemAdapter->method("delete");
+        $flysystemAdapter->method("writeStream");
+        $flysystemAdapter->method("createDirectory");
         $filesystem = new Filesystem(new Adapter($flysystemAdapter), new Settings(['disable_asserts' => true]));
 
         $result = $filesystem->syncFrom(
@@ -527,70 +331,34 @@ class FilesystemTest extends TestCase
 
     public function testSyncWithoutRoot()
     {
-        $destinationFiles = [
-            [
-                'type' => 'dir',
-                'path' => 'dir1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir1/file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir1/file2',
-            ],
-            [
-                'type' => 'dir',
-                'path' => 'dir2',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir2/file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir2/file2',
-            ],
-        ];
+        $destinationFiles = new DirectoryListing(new \ArrayIterator([
+            new DirectoryAttributes('dir1'),
+            new FileAttributes('dir1/file1'),
+            new FileAttributes('dir1/file2'),
+            new DirectoryAttributes('dir2'),
+            new FileAttributes('dir2/file1'),
+            new FileAttributes('dir2/file2'),
+        ]));
 
-        $sourceFiles = [
-            [
-                'type' => 'dir',
-                'path' => 'dir1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir1/file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir1/file2',
-            ],
-            [
-                'type' => 'dir',
-                'path' => 'dir3',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir3/file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'dir3/file2',
-            ],
-        ];
+        $sourceFiles = new DirectoryListing(new \ArrayIterator([
+            new DirectoryAttributes('dir1'),
+            new FileAttributes('dir1/file1'),
+            new FileAttributes('dir1/file2'),
+            new DirectoryAttributes('dir3'),
+            new FileAttributes('dir3/file1'),
+            new FileAttributes('dir3/file2'),
+        ]));
 
         $sourceFilesystem = $this->createMock(FilesystemInterface::class);
         $sourceFilesystem->method("listContents")->willReturn($sourceFiles);
         $sourceFilesystem->method("readStream")->willReturn(\fopen("php://temp", "r"));
 
-        $flysystemAdapter = $this->createMock(AdapterInterface::class);
+        $flysystemAdapter = $this->createMock(FilesystemAdapter::class);
         $flysystemAdapter->method("listContents")->willReturn($destinationFiles);
-        $flysystemAdapter->method("deleteDir")->willReturn(true);
-        $flysystemAdapter->method("delete")->willReturn(true);
-        $flysystemAdapter->method("writeStream")->willReturn(true);
-        $flysystemAdapter->method("createDir")->willReturn(true);
+        $flysystemAdapter->method("deleteDirectory");
+        $flysystemAdapter->method("delete");
+        $flysystemAdapter->method("writeStream");
+        $flysystemAdapter->method("createDirectory");
         $filesystem = new Filesystem(new Adapter($flysystemAdapter), new Settings(['disable_asserts' => true]));
 
         $result = $filesystem->syncFrom($sourceFilesystem);
@@ -617,38 +385,26 @@ class FilesystemTest extends TestCase
 
     public function testSyncWithDoFlags()
     {
-        $destinationFiles = [
-            [
-                'type' => 'file',
-                'path' => 'file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'file2',
-            ],
-        ];
+        $destinationFiles = new DirectoryListing(new \ArrayIterator([
+            new FileAttributes('file1'),
+            new FileAttributes('file2'),
+        ]));
 
-        $sourceFiles = [
-            [
-                'type' => 'file',
-                'path' => 'file1',
-            ],
-            [
-                'type' => 'file',
-                'path' => 'file3',
-            ],
-        ];
+        $sourceFiles = new DirectoryListing(new \ArrayIterator([
+            new FileAttributes('file1'),
+            new FileAttributes('file3'),
+        ]));
 
         $sourceFilesystem = $this->createMock(FilesystemInterface::class);
         $sourceFilesystem->method("listContents")->willReturn($sourceFiles);
         $sourceFilesystem->method("readStream")->willReturn(\fopen("php://temp", "r"));
 
-        $flysystemAdapter = $this->createMock(AdapterInterface::class);
+        $flysystemAdapter = $this->createMock(FilesystemAdapter::class);
         $flysystemAdapter->method("listContents")->willReturn($destinationFiles);
-        $flysystemAdapter->method("deleteDir")->willReturn(true);
-        $flysystemAdapter->method("delete")->willReturn(true);
-        $flysystemAdapter->method("writeStream")->willReturn(true);
-        $flysystemAdapter->method("createDir")->willReturn(true);
+        $flysystemAdapter->method("deleteDirectory");
+        $flysystemAdapter->method("delete");
+        $flysystemAdapter->method("writeStream");
+        $flysystemAdapter->method("createDirectory");
         $filesystem = new Filesystem(new Adapter($flysystemAdapter), new Settings(['disable_asserts' => true]));
 
         $result = $filesystem->syncFrom(

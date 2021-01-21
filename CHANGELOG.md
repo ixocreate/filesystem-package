@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/ixocreate/filesystem-package/compare/0.3.3...develop)
+## [Unreleased](https://github.com/ixocreate/filesystem-package/compare/0.4.0...develop)
+
+## [v0.4.0 (2021-01-21)](https://github.com/ixocreate/validation-package/compare/0.3.3...0.4.0)
+### Changed
+- Update to Application 0.3
+- Update to Flysystem 2.0
 
 ## [v0.3.3 (2019-12-04)](https://github.com/ixocreate/filesystem-package/compare/0.3.2...0.3.3)
 ### Added

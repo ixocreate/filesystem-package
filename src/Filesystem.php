@@ -9,10 +9,15 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem;
 
+use League\Flysystem\DirectoryListing;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\FilesystemOperator;
+use League\Flysystem\FilesystemReader;
+
 final class Filesystem implements FilesystemInterface
 {
     /**
-     * @var \League\Flysystem\FilesystemInterface
+     * @var FilesystemOperator
      */
     private $innerFilesystem;
 
@@ -41,16 +46,17 @@ final class Filesystem implements FilesystemInterface
 
     /**
      * @param string $path
+     * @throws FilesystemException
      * @return bool
      */
     public function has(string $path): bool
     {
-        return $this->innerFilesystem->has($path);
+        return $this->innerFilesystem->fileExists($path);
     }
 
     /**
      * @param string $path
-     * @throws \League\Flysystem\FileNotFoundException
+     * @throws FilesystemException
      * @return string|false
      */
     public function read(string $path)
@@ -60,7 +66,7 @@ final class Filesystem implements FilesystemInterface
 
     /**
      * @param string $path
-     * @throws \League\Flysystem\FileNotFoundException
+     * @throws FilesystemException
      * @return resource|false
      */
     public function readStream(string $path)
@@ -71,205 +77,132 @@ final class Filesystem implements FilesystemInterface
     /**
      * @param string $directory
      * @param bool $recursive
-     * @return array
+     * @return DirectoryListing
      */
-    public function listContents(string $directory = '', bool $recursive = false): array
+    public function listContents(string $directory = '', bool $recursive = false): DirectoryListing
     {
-        return $this->innerFilesystem->listContents($directory, $recursive);
+        return $this->innerFilesystem->listContents($directory, $recursive ? FilesystemReader::LIST_DEEP : FilesystemReader::LIST_SHALLOW);
     }
 
     /**
      * @param string $path
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return array|false
+     * @throws FilesystemException
+     * @return int|null
      */
-    public function getMetadata(string $path)
+    public function getSize(string $path): ?int
     {
-        return $this->innerFilesystem->getMetadata($path);
+        return $this->innerFilesystem->fileSize($path);
     }
 
     /**
      * @param string $path
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return int|false
+     * @throws FilesystemException
+     * @return string|null
      */
-    public function getSize(string $path)
+    public function getMimetype(string $path): ?string
     {
-        return $this->innerFilesystem->getSize($path);
+        return $this->innerFilesystem->mimeType($path);
     }
 
     /**
      * @param string $path
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return string|false
+     * @throws FilesystemException
+     * @return int|null
      */
-    public function getMimetype(string $path)
+    public function getTimestamp(string $path): ?int
     {
-        return $this->innerFilesystem->getMimetype($path);
+        return $this->innerFilesystem->lastModified($path);
     }
 
     /**
      * @param string $path
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return string|false
+     * @throws FilesystemException
+     * @return string|null
      */
-    public function getTimestamp(string $path)
+    public function getVisibility(string $path): ?string
     {
-        return $this->innerFilesystem->getTimestamp($path);
-    }
-
-    /**
-     * @param string $path
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return string|false
-     */
-    public function getVisibility(string $path)
-    {
-        return $this->innerFilesystem->getVisibility($path);
+        return $this->innerFilesystem->visibility($path);
     }
 
     /**
      * @param string $path
      * @param string $contents
-     * @param SettingsInterface $settings
-     * @throws \League\Flysystem\FileExistsException
-     * @return bool
+     * @param SettingsInterface|null $settings
+     * @throws FilesystemException
      */
-    public function write(string $path, string $contents, ?SettingsInterface $settings = null): bool
+    public function write(string $path, string $contents, ?SettingsInterface $settings = null): void
     {
-        return $this->innerFilesystem->write($path, $contents, $this->createConfig($settings));
+        $this->innerFilesystem->write($path, $contents, $this->createConfig($settings));
     }
 
     /**
      * @param string $path
      * @param resource $resource
      * @param SettingsInterface $settings
-     * @throws \League\Flysystem\FileExistsException
-     * @return bool
+     * @throws FilesystemException
      */
-    public function writeStream(string $path, $resource, ?SettingsInterface $settings = null): bool
+    public function writeStream(string $path, $resource, ?SettingsInterface $settings = null): void
     {
-        return $this->innerFilesystem->writeStream($path, $resource, $this->createConfig($settings));
+        $this->innerFilesystem->writeStream($path, $resource, $this->createConfig($settings));
     }
 
     /**
      * @param string $path
-     * @param string $contents
-     * @param SettingsInterface $settings
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return bool
+     * @param string $newPath
+     * @param SettingsInterface|null $settings
+     * @throws FilesystemException
      */
-    public function update(string $path, string $contents, ?SettingsInterface $settings = null): bool
+    public function rename(string $path, string $newPath, ?SettingsInterface $settings = null): void
     {
-        return $this->innerFilesystem->update($path, $contents, $this->createConfig($settings));
+        $this->innerFilesystem->move($path, $newPath, $this->createConfig($settings));
     }
 
     /**
      * @param string $path
-     * @param resource $resource
-     * @param SettingsInterface $settings
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return bool
+     * @param string $newPath
+     * @param SettingsInterface|null $settings
+     * @throws FilesystemException
      */
-    public function updateStream(string $path, $resource, ?SettingsInterface $settings = null): bool
+    public function copy(string $path, string $newPath, ?SettingsInterface $settings = null): void
     {
-        return $this->innerFilesystem->updateStream($path, $resource, $this->createConfig($settings));
+        $this->innerFilesystem->copy($path, $newPath, $this->createConfig($settings));
     }
 
     /**
      * @param string $path
-     * @param string $newpath
-     * @throws \League\Flysystem\FileExistsException
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return bool
+     * @throws FilesystemException
      */
-    public function rename(string $path, string $newpath): bool
+    public function delete(string $path): void
     {
-        return $this->innerFilesystem->rename($path, $newpath);
-    }
-
-    /**
-     * @param string $path
-     * @param string $newpath
-     * @throws \League\Flysystem\FileExistsException
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return bool
-     */
-    public function copy(string $path, string $newpath): bool
-    {
-        return $this->innerFilesystem->copy($path, $newpath);
-    }
-
-    /**
-     * @param string $path
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return bool
-     */
-    public function delete(string $path): bool
-    {
-        return $this->innerFilesystem->delete($path);
+        $this->innerFilesystem->delete($path);
     }
 
     /**
      * @param string $dirname
-     * @return bool
      */
-    public function deleteDir(string $dirname): bool
+    public function deleteDir(string $dirname): void
     {
-        return $this->innerFilesystem->deleteDir($dirname);
+        $this->innerFilesystem->deleteDirectory($dirname);
     }
 
     /**
      * @param string $dirname
-     * @param SettingsInterface $settings
-     * @return bool
+     * @param SettingsInterface|null $settings
+     * @throws FilesystemException
      */
-    public function createDir(string $dirname, ?SettingsInterface $settings = null): bool
+    public function createDir(string $dirname, ?SettingsInterface $settings = null): void
     {
-        return $this->innerFilesystem->createDir($dirname, $this->createConfig($settings));
+        $this->innerFilesystem->createDirectory($dirname, $this->createConfig($settings));
     }
 
     /**
      * @param string $path
      * @param string $visibility
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return bool
+     * @throws FilesystemException
      */
-    public function setVisibility(string $path, string $visibility): bool
+    public function setVisibility(string $path, string $visibility): void
     {
-        return $this->innerFilesystem->setVisibility($path, $visibility);
-    }
-
-    /**
-     * @param string $path
-     * @param string $contents
-     * @param SettingsInterface $settings
-     * @return bool
-     */
-    public function put(string $path, string $contents, ?SettingsInterface $settings = null): bool
-    {
-        return $this->innerFilesystem->put($path, $contents, $this->createConfig($settings));
-    }
-
-    /**
-     * @param string $path
-     * @param resource $resource
-     * @param SettingsInterface $settings
-     * @return bool
-     */
-    public function putStream(string $path, $resource, ?SettingsInterface $settings = null): bool
-    {
-        return $this->innerFilesystem->put($path, $resource, $this->createConfig($settings));
-    }
-
-    /**
-     * @param string $path
-     * @throws \League\Flysystem\FileNotFoundException
-     * @return string|false
-     */
-    public function readAndDelete(string $path)
-    {
-        return $this->innerFilesystem->readAndDelete($path);
+        $this->innerFilesystem->setVisibility($path, $visibility);
     }
 
     public function syncFrom(FilesystemInterface $filesystem, ?SettingsInterface $settings = null): array
@@ -311,7 +244,7 @@ final class Filesystem implements FilesystemInterface
                     if (!empty($sourceRoot)) {
                         $sourcePath = $sourceRoot . '/' . $sourcePath;
                     }
-                    $this->putStream($destinationPath, $filesystem->readStream($sourcePath));
+                    $this->writeStream($destinationPath, $filesystem->readStream($sourcePath));
                     $result['update'][] = $destinationPath;
                     continue;
                 }

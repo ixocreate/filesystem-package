@@ -12,7 +12,7 @@ namespace Ixocreate\Test\Filesystem\Option;
 use Ixocreate\Filesystem\Adapter;
 use Ixocreate\Filesystem\Option\LocalOption;
 use Ixocreate\ServiceManager\ServiceManagerInterface;
-use League\Flysystem\Adapter\Local;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -133,11 +133,11 @@ class LocalOptionTest extends TestCase
 
         /** @var Adapter $adapter */
         $adapter = $localOption->create("test", $serviceManager);
-        $this->assertInstanceOf(Local::class, $adapter->adapter());
+        $this->assertInstanceOf(LocalFilesystemAdapter::class, $adapter->adapter());
         $reflection = new \ReflectionClass($adapter->adapter());
         $property = $reflection->getProperty("linkHandling");
         $property->setAccessible(true);
-        $this->assertSame(Local::SKIP_LINKS, $property->getValue($adapter->adapter()));
+        $this->assertSame(LocalFilesystemAdapter::SKIP_LINKS, $property->getValue($adapter->adapter()));
         $property = $reflection->getProperty("writeFlags");
         $property->setAccessible(true);
         $this->assertSame(0, $property->getValue($adapter->adapter()));
@@ -149,6 +149,6 @@ class LocalOptionTest extends TestCase
         $reflection = new \ReflectionClass($adapter->adapter());
         $property = $reflection->getProperty("linkHandling");
         $property->setAccessible(true);
-        $this->assertSame(Local::DISALLOW_LINKS, $property->getValue($adapter->adapter()));
+        $this->assertSame(LocalFilesystemAdapter::DISALLOW_LINKS, $property->getValue($adapter->adapter()));
     }
 }

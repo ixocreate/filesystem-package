@@ -9,8 +9,12 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem;
 
-use Ixocreate\ServiceManager\SubManager\SubManager;
+use Ixocreate\ServiceManager\SubManager\AbstractSubManager;
 
-final class FilesystemManager extends SubManager
+final class FilesystemManager extends AbstractSubManager
 {
+    public static function validation(): ?string
+    {
+        return FilesystemInterface::class;
+    }
 }

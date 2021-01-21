@@ -9,9 +9,8 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem\Factory;
 
-use Ixocreate\Application\Service\ServiceManagerConfigurator;
+use Ixocreate\Application\ServiceManager\ServiceManagerConfigurator;
 use Ixocreate\Filesystem\FilesystemConfig;
-use Ixocreate\Filesystem\FilesystemInterface;
 use Ixocreate\Filesystem\FilesystemManager;
 use Ixocreate\ServiceManager\ServiceManagerInterface;
 use Ixocreate\ServiceManager\SubManager\SubManagerFactoryInterface;
@@ -21,11 +20,11 @@ final class FilesystemManagerFactory implements SubManagerFactoryInterface
 {
     /**
      * @param ServiceManagerInterface $container
-     * @param $requestedName
+     * @param string $requestedName
      * @param array|null $options
      * @return SubManagerInterface
      */
-    public function __invoke(ServiceManagerInterface $container, $requestedName, array $options = null): SubManagerInterface
+    public function __invoke(ServiceManagerInterface $container, string $requestedName, array $options = null): SubManagerInterface
     {
         /** @var FilesystemConfig $filesystemConfig */
         $filesystemConfig = $container->get(FilesystemConfig::class);
@@ -37,8 +36,7 @@ final class FilesystemManagerFactory implements SubManagerFactoryInterface
 
         return new FilesystemManager(
             $container,
-            $serviceManagerConfigurator->getServiceManagerConfig(),
-            FilesystemInterface::class
+            $serviceManagerConfigurator->getServiceManagerConfig()
         );
     }
 }

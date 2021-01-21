@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem;
 
-use Ixocreate\Application\Service\ServiceManagerConfigurator;
+use Ixocreate\Application\ServiceManager\ServiceManagerConfigurator;
 use Ixocreate\Filesystem\Factory\FilesystemManagerFactory;
 
 /** @var ServiceManagerConfigurator $serviceManager */

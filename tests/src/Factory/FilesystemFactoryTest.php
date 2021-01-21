@@ -16,7 +16,7 @@ use Ixocreate\Filesystem\FilesystemConfigurator;
 use Ixocreate\Filesystem\FilesystemInterface;
 use Ixocreate\Filesystem\Option\LocalOption;
 use Ixocreate\ServiceManager\ServiceManagerInterface;
-use League\Flysystem\Adapter\Local;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,7 +26,7 @@ class FilesystemFactoryTest extends TestCase
 {
     private $container;
 
-    public function setUp()
+    public function setUp(): void
     {
         $filesystemConfigurator = new FilesystemConfigurator();
         $filesystemConfigurator->addStorage("test", new LocalOption(\getcwd()));
@@ -46,7 +46,13 @@ class FilesystemFactoryTest extends TestCase
         $reflection = new \ReflectionClass($filesystem);
         $property = $reflection->getProperty("innerFilesystem");
         $property->setAccessible(true);
-        $this->assertInstanceOf(Local::class, $property->getValue($filesystem)->getAdapter());
+
+        $innerFilesystem = $property->getValue($filesystem);
+        $reflection = new \ReflectionClass($innerFilesystem);
+        $property = $reflection->getProperty('adapter');
+        $property->setAccessible(true);
+
+        $this->assertInstanceOf(LocalFilesystemAdapter::class, $property->getValue($innerFilesystem));
     }
 
     public function testException()

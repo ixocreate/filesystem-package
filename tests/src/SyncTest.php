@@ -11,6 +11,9 @@ namespace Ixocreate\Test\Filesystem;
 
 use Ixocreate\Filesystem\FilesystemInterface;
 use Ixocreate\Filesystem\Sync;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\DirectoryListing;
+use League\Flysystem\FileAttributes;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -99,126 +102,45 @@ class SyncTest extends TestCase
     {
         return [
             [
-                [
-                    [
-                        'type' => 'dir',
-                        'path' => 'dir1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir1/file1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir1/file3',
-                    ],
-                    [
-                        'type' => 'dir',
-                        'path' => 'dir2',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir2/file1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir2/file2',
-                    ],
-                    [
-                        'type' => 'dir',
-                        'path' => 'dir3',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir3/file1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir3/file2',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir3/file3',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir3/file4',
-                    ],
-                ],
-                [
-                    [
-                        'type' => 'dir',
-                        'path' => 'dir1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir1/file1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir1/file2',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir1/file3',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir1/file4',
-                    ],
-                    [
-                        'type' => 'dir',
-                        'path' => 'dir2',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir2/file1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir2/file2',
-                    ],
-                    [
-                        'type' => 'dir',
-                        'path' => 'dir3',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir3/file1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir3/file2',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'dir3/file3',
-                    ],
-                ],
+                new DirectoryListing(new \ArrayIterator([
+                    new FileAttributes('dir1'),
+                    new FileAttributes('dir1/file1'),
+                    new FileAttributes('dir1/file3'),
+                    new FileAttributes('dir2'),
+                    new FileAttributes('dir2/file1'),
+                    new FileAttributes('dir2/file2'),
+                    new FileAttributes('dir3'),
+                    new FileAttributes('dir3/file1'),
+                    new FileAttributes('dir3/file2'),
+                    new FileAttributes('dir3/file3'),
+                    new FileAttributes('dir3/file4'),
+                ])),
+                new DirectoryListing(new \ArrayIterator([
+                    new FileAttributes('dir1'),
+                    new FileAttributes('dir1/file1'),
+                    new FileAttributes('dir1/file2'),
+                    new FileAttributes('dir1/file3'),
+                    new FileAttributes('dir1/file4'),
+                    new FileAttributes('dir2'),
+                    new FileAttributes('dir2/file1'),
+                    new FileAttributes('dir2/file2'),
+                    new FileAttributes('dir3'),
+                    new FileAttributes('dir3/file1'),
+                    new FileAttributes('dir3/file2'),
+                    new FileAttributes('dir3/file3'),
+                ])),
                 'sourceRoot',
                 'destRoot',
             ],
             [
-                [
-                    [
-                        'type' => 'dir',
-                        'path' => 'sourceRoot/dir1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'sourceRoot/dir1/file1',
-                    ],
-                ],
-                [
-                    [
-                        'type' => 'dir',
-                        'path' => 'destRoot/dir1',
-                    ],
-                    [
-                        'type' => 'file',
-                        'path' => 'destRoot/dir1/file1',
-                    ],
-                ],
+                new DirectoryListing(new \ArrayIterator([
+                    new DirectoryAttributes('sourceRoot/dir1'),
+                    new FileAttributes('sourceRoot/dir1/file1'),
+                ])),
+                new DirectoryListing(new \ArrayIterator([
+                    new DirectoryAttributes('destRoot/dir1'),
+                    new FileAttributes('destRoot/dir1/file1'),
+                ])),
                 'sourceRoot',
                 'destRoot',
             ],

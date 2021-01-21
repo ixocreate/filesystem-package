@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem;
 
+use League\Flysystem\FilesystemAdapter;
+
 interface AdapterInterface
 {
-    public function adapter(): \League\Flysystem\AdapterInterface;
+    public function adapter(): FilesystemAdapter;
 }

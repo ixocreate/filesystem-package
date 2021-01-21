@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Ixocreate\Filesystem;
 
+use League\Flysystem\DirectoryListing;
+
 interface FilesystemInterface
 {
     /**
@@ -19,146 +21,94 @@ interface FilesystemInterface
 
     /**
      * @param string $path
-     * @return string|false
+     * @return string
      */
     public function read(string $path);
 
     /**
      * @param string $path
-     * @return resource|false
+     * @return resource
      */
     public function readStream(string $path);
 
     /**
      * @param string $directory
      * @param bool $recursive
-     * @return array
+     * @return DirectoryListing
      */
-    public function listContents(string $directory = '', bool $recursive = false): array;
+    public function listContents(string $directory = '', bool $recursive = false): DirectoryListing;
 
     /**
      * @param string $path
-     * @return array|false
+     * @return int|null
      */
-    public function getMetadata(string $path);
+    public function getSize(string $path): ?int;
 
     /**
      * @param string $path
-     * @return int|false
+     * @return string|null
      */
-    public function getSize(string $path);
+    public function getMimetype(string $path): ?string;
 
     /**
      * @param string $path
-     * @return string|false
+     * @return int|null
      */
-    public function getMimetype(string $path);
+    public function getTimestamp(string $path): ?int;
 
     /**
      * @param string $path
-     * @return string|false
+     * @return string|null
      */
-    public function getTimestamp(string $path);
-
-    /**
-     * @param string $path
-     * @return string|false
-     */
-    public function getVisibility(string $path);
+    public function getVisibility(string $path): ?string;
 
     /**
      * @param string $path
      * @param string $contents
-     * @param SettingsInterface $settings
-     * @return bool
+     * @param SettingsInterface|null $settings
      */
-    public function write(string $path, string $contents, ?SettingsInterface $settings = null): bool;
+    public function write(string $path, string $contents, ?SettingsInterface $settings = null): void;
 
     /**
      * @param string $path
      * @param resource $resource
-     * @param SettingsInterface $settings
-     * @return bool
+     * @param SettingsInterface|null $settings
      */
-    public function writeStream(string $path, $resource, ?SettingsInterface $settings = null): bool;
+    public function writeStream(string $path, $resource, ?SettingsInterface $settings = null): void;
 
     /**
      * @param string $path
-     * @param string $contents
-     * @param SettingsInterface $settings
-     * @return bool
+     * @param string $newPath
      */
-    public function update(string $path, string $contents, ?SettingsInterface $settings = null): bool;
+    public function rename(string $path, string $newPath): void;
 
     /**
      * @param string $path
-     * @param resource $resource
-     * @param SettingsInterface $settings
-     * @return bool
+     * @param string $newPath
      */
-    public function updateStream(string $path, $resource, ?SettingsInterface $settings = null): bool;
+    public function copy(string $path, string $newPath): void;
 
     /**
      * @param string $path
-     * @param string $newpath
-     * @return bool
      */
-    public function rename(string $path, string $newpath): bool;
-
-    /**
-     * @param string $path
-     * @param string $newpath
-     * @return bool
-     */
-    public function copy(string $path, string $newpath): bool;
-
-    /**
-     * @param string $path
-     * @return bool
-     */
-    public function delete(string $path): bool;
+    public function delete(string $path): void;
 
     /**
      * @param string $dirname
-     * @return bool
      */
-    public function deleteDir(string $dirname): bool;
+    public function deleteDir(string $dirname): void;
 
     /**
      * @param string $dirname
-     * @param SettingsInterface $settings
-     * @return bool
+     * @param SettingsInterface|null $settings
      */
-    public function createDir(string $dirname, ?SettingsInterface $settings = null): bool;
+    public function createDir(string $dirname, ?SettingsInterface $settings = null): void;
 
     /**
      * @param string $path
      * @param string $visibility
-     * @return bool
      */
-    public function setVisibility(string $path, string $visibility): bool;
-
-    /**
-     * @param string $path
-     * @param string $contents
-     * @param SettingsInterface $settings
-     * @return bool
-     */
-    public function put(string $path, string $contents, ?SettingsInterface $settings = null): bool;
-
-    /**
-     * @param string $path
-     * @param resource $resource
-     * @param SettingsInterface $settings
-     * @return bool
-     */
-    public function putStream(string $path, $resource, ?SettingsInterface $settings = null): bool;
-
-    /**
-     * @param string $path
-     * @return string|false
-     */
-    public function readAndDelete(string $path);
+    public function setVisibility(string $path, string $visibility): void;
 
     /**
      * @param FilesystemInterface $filesystem

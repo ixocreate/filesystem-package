@@ -177,7 +177,7 @@ class FilesystemTest extends TestCase
         $mockAdapter = $this->createMock(FilesystemAdapter::class);
         $mockAdapter->expects($this->once())->method('writeStream')->with(
             $this->equalTo('test'),
-            $this->callback(function($value) {
+            $this->callback(function ($value) {
                 return \is_resource($value);
             }),
             $this->anything()

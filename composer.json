@@ -11,16 +11,14 @@
             "role": "Developer"
         }
     ],
-  "minimum-stability": "dev",
-  "prefer-stable": true,
     "require": {
         "php": "^7.2 || ^8.0",
-        "ixocreate/application": "dev-develop",
+        "ixocreate/application": "^0.3.0",
         "league/flysystem": "^2.0"
     },
     "require-dev": {
         "ixocreate/coding-standard": "^2.1",
-        "ixocreate/test": "^0.1",
+        "ixocreate/test": "^0.2",
         "league/flysystem-aws-s3-v3": "^2.0"
     },
     "autoload": {

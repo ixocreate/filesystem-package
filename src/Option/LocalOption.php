@@ -15,6 +15,7 @@ use Ixocreate\Filesystem\OptionInterface;
 use Ixocreate\ServiceManager\ServiceManagerInterface;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
+use League\Flysystem\Visibility;
 
 final class LocalOption implements OptionInterface
 {
@@ -202,7 +203,8 @@ final class LocalOption implements OptionInterface
             $this->config['permission']['file']['public'],
             $this->config['permission']['file']['private'],
             $this->config['permission']['dir']['public'],
-            $this->config['permission']['dir']['private']
+            $this->config['permission']['dir']['private'],
+            Visibility::PUBLIC
         );
 
         return new Adapter(

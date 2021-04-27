@@ -25,6 +25,7 @@ final class S3Option implements OptionInterface
         'version' => 'latest',
         'bucketName' => '',
         'initialPath' => '',
+        'visibility' => null,
         'options' => [],
     ];
 
@@ -76,6 +77,16 @@ final class S3Option implements OptionInterface
     public function bucketName(): string
     {
         return $this->config['bucketName'];
+    }
+
+    public function setVisibility(string $visibility): void
+    {
+        $this->config['visibility'] = $visibility;
+    }
+
+    public function visibility(): ?string
+    {
+        return $this->config['visibility'];
     }
 
     public function setInitialPath(string $initialPath): void
@@ -145,6 +156,12 @@ final class S3Option implements OptionInterface
      */
     public function create(string $name, ServiceManagerInterface $serviceManager): AdapterInterface
     {
+        $visibility = null;
+        if ($this->visibility() !== null) {
+            $visibility = $this->visibility();
+            $visibility = new $visibility();
+        }
+
         return new Adapter(
             new AwsS3V3Adapter(
                 new S3Client([
@@ -157,7 +174,7 @@ final class S3Option implements OptionInterface
                 ]),
                 $this->bucketName(),
                 $this->initialPath(),
-                null,
+                $visibility,
                 null,
                 $this->options()
             )
